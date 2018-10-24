@@ -21,11 +21,18 @@ logbook:
     category: http.wire-log
 
 ---
-
+    
 spring:
-  profiles: local
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: jwt-server
+  datasource:
+    url: jdbc:oracle:thin:@//192.168.99.103:1521/xe
+    username: safe_user
+    password: 1234qwer
+    driver-class-name: oracle.jdbc.OracleDriver
+
+#hibernate config
+
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    show-sql: true
+server:
+  port: 4000

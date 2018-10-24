@@ -5,28 +5,37 @@ import io.vavr.Tuple2;
 import io.vavr.Tuple3;
 import io.vavr.match.annotation.Patterns;
 import io.vavr.match.annotation.Unapply;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Builder
-@Document
-@Patterns
-public class User {
+@Table(name = "usuarios")
+@Entity
+public class User implements Serializable {
 
-  @Id
-  private String email;
-  private String name;
-  private String surname;
-  private String hash;
+	private static final long serialVersionUID = 1926539239890170995L;
 
-  @Unapply
-  static Tuple2<String, String> User(final User user) {
-    return Tuple.of(user.getEmail(), user.getHash());
-  }
+	@Id
+	private Long id;
+
+	private String email;
+	private String name;
+	private String surname;
+	private String hash;
+
 }

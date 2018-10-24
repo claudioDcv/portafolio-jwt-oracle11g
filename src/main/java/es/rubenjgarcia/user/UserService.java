@@ -1,6 +1,6 @@
 package es.rubenjgarcia.user;
 
-import static es.rubenjgarcia.user.document.UserPatterns.$User;
+// import static es.rubenjgarcia.user.document.UserPatterns.$User;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -20,15 +20,24 @@ public class UserService {
   private UserRepository userRepository;
 
   public boolean existUser(final String email, String password) {
-    final User user = userRepository.findOne(email);
+    final User user = userRepository.findByEmail(email);
+    
+    if(user == null) {
+    	return false;
+    }
+    
+    return PasswordUtils.verifyPassword(password, user.getHash());
+    
+    /*
     return Match(user).of(
         Case($User($(), $(h -> PasswordUtils.verifyPassword(password, h))), (e, h) -> true),
         Case($(), false)
     );
+    */
   }
 
   public UserJson getUserByEmail(final String email) throws NotFoundException {
-    final User user = userRepository.findOne(email);
+    final User user = userRepository.findByEmail(email);
     return Option.of(user)
         .map(UserBuilder::buildUserJson)
         .getOrElseThrow(NotFoundException::new);
@@ -36,6 +45,7 @@ public class UserService {
 
   public UserJson registerUser(final String email, final String password, final String name, final String surname) {
     final User user = User.builder()
+    		.id((long) 1)
         .email(email)
         .name(name)
         .surname(surname)
