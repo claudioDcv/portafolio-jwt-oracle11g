@@ -24,7 +24,7 @@ public class ProfileSAFEController {
 	@GetMapping(value="/por-id-usuario/{id}")
 	public ResponseDto<List<Profile>> getProfileByUserId(@PathVariable(name="id") Long id) {
 		ResponseDto<List<Profile>> responseDto = new ResponseDto<>();
-		responseDto.setObject(profileService.getProfileByUserId(id));
+		responseDto.setObj(profileService.getProfileByUserId(id));
 		return responseDto;
 	}
 	
@@ -32,7 +32,7 @@ public class ProfileSAFEController {
 	@GetMapping("")
 	public ResponseDto<List<Profile>> findAll() {
 		ResponseDto<List<Profile>> responseDto = new ResponseDto<>();
-		responseDto.setObject(profileService.getAllProfiles());
+		responseDto.setObj(profileService.getAllProfiles());
 		return responseDto;
 	}
 }

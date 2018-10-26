@@ -34,7 +34,7 @@ public class UsersController {
 		
 		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.PREVENCIONISTA)) {
 			ResponseDto<List<UserEntity>> rdto = new ResponseDto<>();
-			rdto.setObject(userServiceSP.getAllUsers());
+			rdto.setObj(userServiceSP.getAllUsers());
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
@@ -48,7 +48,7 @@ public class UsersController {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.PREVENCIONISTA)) {
 			ResponseDto<UserEntity> rdto = new ResponseDto<>();
-			rdto.setObject(userServiceSP.findById(id));
+			rdto.setObj(userServiceSP.findById(id));
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
