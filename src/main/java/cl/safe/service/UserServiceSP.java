@@ -17,6 +17,8 @@ public interface UserServiceSP {
 	
 	UserEntity findById(Long id);
 	
+	UserEntity findByEmail(String email);
+	
 	@Transactional
 	Long delete (Long id);
 	

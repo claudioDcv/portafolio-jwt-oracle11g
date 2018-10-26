@@ -38,7 +38,7 @@ public class UserServiceSPImpl implements UserServiceSP {
 	public Long updateSP(UserEntity user) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_update");
 		query.setParameter("p_EMAIL", user.getEmail());
-		query.setParameter("p_DISPLAY_NAME", user.getDisplayName());
+		query.setParameter("p_DISPLAY_NAME", user.getName());
 		query.setParameter("p_USER_ID", user.getId());
 		query.execute();
 		return (Long) query.getOutputParameterValue("o_USER_ID");
@@ -55,6 +55,13 @@ public class UserServiceSPImpl implements UserServiceSP {
 		} catch (Exception e) {
 			return DEFAULT;
 		}
+	}
+	
+	@Override
+	public UserEntity findByEmail(String email) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_by_email");
+		query.setParameter("p_email", email);
+		return (UserEntity) query.getSingleResult();
 	}
 
 }

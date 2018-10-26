@@ -42,6 +42,15 @@ import lombok.ToString;
 			}
 	),
 	@NamedStoredProcedureQuery(
+			name = "users_by_email",
+			procedureName = "users_by_email",
+			resultClasses= { UserEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_email", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
 			name = "users_insert",
 			procedureName = "users_insert",
 			resultClasses= { UserEntity.class},
@@ -88,9 +97,6 @@ public class UserEntity implements Serializable {
 	@Getter @Setter Long id;
 	
 	@Column(name="DISPLAY_NAME")
-	@Getter @Setter String displayName;
-	
-	@Column(name="FIRSTNAME")
 	@Getter @Setter String name;
 	
 	@Column(name="LASTNAME")

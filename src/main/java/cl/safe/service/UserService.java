@@ -1,19 +1,15 @@
-package cl.safe.user;
-
-// import static es.rubenjgarcia.user.document.UserPatterns.$User;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
+package cl.safe.service;
 
 import io.vavr.control.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.safe.controller.NotFoundException;
+import cl.safe.dto.UserJson;
 import cl.safe.entity.UserEntity;
+import cl.safe.repository.UserRepository;
 import cl.safe.security.PasswordUtils;
-import cl.safe.user.controller.response.UserJson;
-import cl.safe.user.document.User;
+import cl.safe.user.UserBuilder;
 
 @Service
 public class UserService {
@@ -29,13 +25,6 @@ public class UserService {
     }
     
     return PasswordUtils.verifyPassword(password, user.getHash());
-    
-    /*
-    return Match(user).of(
-        Case($User($(), $(h -> PasswordUtils.verifyPassword(password, h))), (e, h) -> true),
-        Case($(), false)
-    );
-    */
   }
 
   public UserJson getUserByEmail(final String email) throws NotFoundException {
