@@ -1,8 +1,7 @@
 package cl.safe.user;
 
+import cl.safe.dto.UserJson;
 import cl.safe.entity.UserEntity;
-import cl.safe.user.controller.response.UserJson;
-import cl.safe.user.document.User;
 
 public interface UserBuilder {
 
@@ -11,6 +10,7 @@ public interface UserBuilder {
         .email(user.getEmail())
         .name(user.getName())
         .surname(user.getSurname())
+        .profiles(user.getProfiles())
         .build();
   }
 }

@@ -1,6 +1,10 @@
-package cl.safe.user.controller.response;
+package cl.safe.dto;
+
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import cl.safe.entity.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +17,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class UserJson {
+public class UserJson{
 
   private String email;
   private String name;
   private String surname;
+  private List<Profile> profiles;
 }

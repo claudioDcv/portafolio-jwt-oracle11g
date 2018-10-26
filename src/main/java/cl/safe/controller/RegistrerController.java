@@ -1,4 +1,4 @@
-package cl.safe.user.controller;
+package cl.safe.controller;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import cl.safe.controller.NotFoundException;
-import cl.safe.user.UserService;
-import cl.safe.user.controller.request.RegisterRequest;
-import cl.safe.user.controller.response.UserJson;
+import cl.safe.dto.RegisterRequest;
+import cl.safe.dto.UserJson;
+import cl.safe.service.UserService;
 
 @RestController
 @RequestMapping("/register")

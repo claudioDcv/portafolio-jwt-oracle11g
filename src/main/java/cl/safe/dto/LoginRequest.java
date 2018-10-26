@@ -1,4 +1,4 @@
-package cl.safe.security.request;
+package cl.safe.dto;
 
 import lombok.Getter;
 import lombok.Setter;
