@@ -14,30 +14,32 @@ import cl.safe.config.Const;
 import cl.safe.config.Utils;
 import cl.safe.dto.ResponseDto;
 import cl.safe.entity.EmpresaEntity;
+import cl.safe.entity.InstalacionEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.service.EmpresaService;
+import cl.safe.service.InstalacionService;
 import cl.safe.service.UserServiceSP;
 import io.jsonwebtoken.Claims;
 
 @RestController
-@RequestMapping("/api/empresas")
-public class EmpresaController {
+@RequestMapping("/api/instalaciones")
+public class InstalacionController {
 
 	@Autowired
-	EmpresaService empresaService;
+	InstalacionService instalacionService;
 	
 	@Autowired
 	private UserServiceSP userServiceSP;
 
 	@GetMapping("")
-	public ResponseEntity<ResponseDto<List<EmpresaEntity>>> getAll(@RequestAttribute("claims") final Claims claims) {
+	public ResponseEntity<ResponseDto<List<InstalacionEntity>>> getAll(@RequestAttribute("claims") final Claims claims) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		
 		System.out.println(user.getEmail());
 
 		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.PREVENCIONISTA, Const.EXAMINADOR)) {
-			ResponseDto<List<EmpresaEntity>> rdto = new ResponseDto<>();
-			rdto.setObj(empresaService.getAllSP());
+			ResponseDto<List<InstalacionEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(instalacionService.getAllSP());
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);

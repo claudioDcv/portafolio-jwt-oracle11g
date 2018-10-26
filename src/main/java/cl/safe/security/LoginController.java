@@ -55,7 +55,7 @@ public class LoginController {
     ResponseDto<LoginDto> responseDto = new ResponseDto<>();
 	LoginDto loginDto = new LoginDto();
 	loginDto.setToken(jwt);
-	responseDto.setObject(loginDto);
+	responseDto.setObj(loginDto);
 	responseDto.setMessage("SUCCESS");
 	responseDto.setStatus(HttpStatus.OK);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);

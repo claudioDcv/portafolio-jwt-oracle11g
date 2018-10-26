@@ -14,6 +14,6 @@ import lombok.Setter;
 public class ResponseDto<T> {
 	String message;
 	HttpStatus status;
-	T object;
+	T obj;
 	Integer code = 200;
 }
