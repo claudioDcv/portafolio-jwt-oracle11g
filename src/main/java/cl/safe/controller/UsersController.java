@@ -32,7 +32,7 @@ public class UsersController {
 	public ResponseEntity<ResponseDto<List<UserEntity>>> findAll(@RequestAttribute("claims") final Claims claims) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		
-		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.PREVENCIONISTA)) {
+		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.SUPERVISOR)) {
 			ResponseDto<List<UserEntity>> rdto = new ResponseDto<>();
 			rdto.setObj(userServiceSP.getAllUsers());
 			rdto.setMessage("OK");
@@ -46,7 +46,7 @@ public class UsersController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ResponseDto<UserEntity>> getById(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
-		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.PREVENCIONISTA)) {
+		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.SUPERVISOR)) {
 			ResponseDto<UserEntity> rdto = new ResponseDto<>();
 			rdto.setObj(userServiceSP.findById(id));
 			rdto.setMessage("OK");
@@ -58,9 +58,20 @@ public class UsersController {
 	}
 
 	@GetMapping("/profile")
-	public UserJson getProfile(@RequestAttribute("claims") final Claims claims) throws NotFoundException {
+	public ResponseEntity<ResponseDto<UserJson>> getProfile(@RequestAttribute("claims") final Claims claims) throws NotFoundException {
 		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
-		return UserJson.builder().email(u.getEmail()).name(u.getName()).surname(u.getSurname())
+		UserJson uJson = UserJson.builder().email(u.getEmail()).name(u.getName()).surname(u.getSurname())
 				.profiles(u.getProfiles()).build();
+		
+		if(uJson != null) {
+			ResponseDto<UserJson> rdto = new ResponseDto<>();
+			rdto.setObj(uJson);
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+		
+		return Utils.responseUnauthorized();
+		
 	}
 }

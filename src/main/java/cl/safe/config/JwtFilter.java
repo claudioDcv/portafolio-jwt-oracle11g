@@ -32,14 +32,14 @@ public class JwtFilter implements Filter {
   public void doFilter(final ServletRequest req, final ServletResponse res, final FilterChain chain) throws IOException, ServletException {
     final HttpServletRequest request = (HttpServletRequest) req;
     final HttpServletResponse response = (HttpServletResponse) res;
-    final String authHeader = request.getHeader("authorization");
+    final String authHeader = request.getHeader(Const.TOKEN_HEADER_NAME);
 
     if (HttpMethod.OPTIONS.toString().equals(request.getMethod())) {
       response.setStatus(HttpServletResponse.SC_OK);
       chain.doFilter(req, res);
     } else {
 
-      if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      if (authHeader == null || !authHeader.startsWith(Const.TOKEN_PREFIX + " ")) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         return;
       }

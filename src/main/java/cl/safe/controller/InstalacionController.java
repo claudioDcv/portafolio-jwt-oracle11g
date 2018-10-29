@@ -37,7 +37,13 @@ public class InstalacionController {
 		
 		System.out.println(user.getEmail());
 
-		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.PREVENCIONISTA, Const.EXAMINADOR)) {
+		if (Utils.hasProfile(user,
+				Const.ADMIN_SAFE,
+				Const.PREVENCIONISTA,
+				Const.EXAMINADOR,
+				Const.MEDICO,
+				Const.TECNICO,
+				Const.SUPERVISOR)) {
 			ResponseDto<List<InstalacionEntity>> rdto = new ResponseDto<>();
 			rdto.setObj(instalacionService.getAllSP());
 			rdto.setMessage("OK");
