@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.safe.entity.CapacitacionEntity;
+import cl.safe.entity.UserEntity;
 import cl.safe.repository.EmpresaRepository;
 
 @Service
@@ -24,6 +25,13 @@ public class CapacitacionServiceImpl implements CapacitacionService {
 		query.setParameter("P_EMPRESA_FK", empresaId);
 		query.setParameter("p_examinador_fk", examinadorId);
 		return query.getResultList();
+	}
+
+	@Override
+	public CapacitacionEntity findOneSP(Long id) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("CAPACITACION_BY_ID");
+		query.setParameter("P_ID", id);
+		return (CapacitacionEntity) query.getSingleResult();
 	}
 
 }
