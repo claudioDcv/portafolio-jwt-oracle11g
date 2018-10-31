@@ -61,7 +61,7 @@ public class CapacitacionEntity {
 	
 	@ManyToOne
     @JoinColumn(name = "EXAMINADOR_FK")
-	UserEntity medico;
+	UserEntity examinador;
 	
 	@ManyToOne
     @JoinColumn(name = "SUPERVISOR_FK")

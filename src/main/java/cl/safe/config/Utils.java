@@ -21,21 +21,26 @@ public class Utils {
 	}
 
 	public static final Boolean hasProfile(UserEntity user, String... profiles) {
-		Boolean hasAdmin = Boolean.FALSE;
+		Boolean hasValidProfile = Boolean.FALSE;
 		for (Profile profile : user.getProfiles()) {
 			for (String compareProf : profiles) {
 				if (profile.getNaturalKey().equals(compareProf)) {
-					hasAdmin = Boolean.TRUE;
+					hasValidProfile = Boolean.TRUE;
 				}
 			}
 
 		}
-		return hasAdmin;
+		return hasValidProfile;
 
 	}
 	
 	public static final ResponseEntity responseUnauthorized() {
 		ResponseDto responseDto = new ResponseDto<>(Const.UNAUTHORIZED_MESSAGE, HttpStatus.UNAUTHORIZED, null, 401);
+		return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.UNAUTHORIZED);
+	}
+	
+	public static final ResponseEntity responseUnauthorized(String mensaje) {
+		ResponseDto responseDto = new ResponseDto<>(mensaje, HttpStatus.UNAUTHORIZED, null, 401);
 		return new ResponseEntity<ResponseDto>(responseDto, HttpStatus.UNAUTHORIZED);
 	}
 }

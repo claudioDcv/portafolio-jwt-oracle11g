@@ -20,6 +20,7 @@ import cl.safe.config.Utils;
 import cl.safe.dto.CapacitacioneRequestDto;
 import cl.safe.dto.ResponseDto;
 import cl.safe.dto.VisitaMedicaRequestDto;
+import cl.safe.entity.AsistenciaUsuarioEntity;
 import cl.safe.entity.CapacitacionEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.entity.VisitaMedicaEntity;
@@ -58,6 +59,19 @@ public class CapacitacionController {
 			rdto.setObj(capacitacionService.findOneSP(id));
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/asistencias/{id}")
+	public ResponseEntity<ResponseDto<List<AsistenciaUsuarioEntity>>> asistenciasByCapacitacionId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(u, Const.ADMIN_SAFE, Const.EXAMINADOR, Const.SUPERVISOR)) {
+			ResponseDto<List<AsistenciaUsuarioEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(capacitacionService.findAllAsistentesByCapacitacionId(id));
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}
 			

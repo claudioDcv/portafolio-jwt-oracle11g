@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.safe.config.Utils;
 import cl.safe.dto.LoginDto;
 import cl.safe.dto.LoginRequest;
 import cl.safe.dto.ResponseDto;
@@ -39,7 +40,7 @@ public class LoginController {
   public ResponseEntity<ResponseDto<LoginDto>> login(@RequestBody @Valid final LoginRequest login) throws ServletException {
     final boolean existUser = userService.existUser(login.getEmail(), login.getPassword());
     if (!existUser) {
-      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    	return Utils.responseUnauthorized("Email y/o Contraseña invalidas");
     }
 
     final Instant now = Instant.now();

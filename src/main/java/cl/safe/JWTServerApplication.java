@@ -1,9 +1,12 @@
 package cl.safe;
 
 import com.fasterxml.jackson.databind.Module;
+
+import cl.safe.config.FileStorageProperties;
 import io.vavr.jackson.datatype.VavrModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +16,9 @@ import org.springframework.web.filter.CorsFilter;
 
 @ServletComponentScan
 @SpringBootApplication
+@EnableConfigurationProperties({
+    FileStorageProperties.class
+})
 public class JWTServerApplication {
 
   public static void main(String[] args) {
