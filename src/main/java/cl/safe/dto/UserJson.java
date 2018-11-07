@@ -19,8 +19,9 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class UserJson{
 
-  private String email;
-  private String name;
-  private String surname;
-  private List<Profile> profiles;
+	private Long id;
+	private String email;
+	private String name;
+	private String surname;
+	private List<Profile> profiles;
 }

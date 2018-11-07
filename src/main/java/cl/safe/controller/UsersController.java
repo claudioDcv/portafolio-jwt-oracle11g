@@ -56,12 +56,26 @@ public class UsersController {
 			
 		return Utils.responseUnauthorized();
 	}
+	
+	@GetMapping("/perfiles/{id}")
+	public ResponseEntity<ResponseDto<List<UserEntity>>> getAllByProfileId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.SUPERVISOR, Const.EXAMINADOR, Const.MEDICO, Const.PREVENCIONISTA, Const.TECNICO)) {
+			ResponseDto<List<UserEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(userServiceSP.usersByProfileId(id));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
 
 	@GetMapping("/profile")
 	public ResponseEntity<ResponseDto<UserJson>> getProfile(@RequestAttribute("claims") final Claims claims) throws NotFoundException {
 		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
 		UserJson uJson = UserJson.builder().email(u.getEmail()).name(u.getName()).surname(u.getSurname())
-				.profiles(u.getProfiles()).build();
+				.profiles(u.getProfiles()).id(u.getId()).build();
 		
 		if(uJson != null) {
 			ResponseDto<UserJson> rdto = new ResponseDto<>();

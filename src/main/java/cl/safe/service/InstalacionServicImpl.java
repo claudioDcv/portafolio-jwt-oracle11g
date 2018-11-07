@@ -12,7 +12,7 @@ import cl.safe.entity.EmpresaEntity;
 import cl.safe.entity.InstalacionEntity;
 
 @Service
-public class InstalacionServiceImpl implements InstalacionService {
+public class InstalacionServicImpl implements InstalacionService {
 
 	@PersistenceContext
     private EntityManager em;
@@ -21,6 +21,13 @@ public class InstalacionServiceImpl implements InstalacionService {
 	public List<InstalacionEntity> getAllSP() {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("instalaciones_get_all");
         return query.getResultList();
+	}
+
+	@Override
+	public List<InstalacionEntity> getAllByEmpresaId(Long id) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("INSTALACIONES_BY_EMPRESA_ID");
+		query.setParameter("p_id", id);
+		return query.getResultList();
 	}
 
 }

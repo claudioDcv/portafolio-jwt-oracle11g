@@ -23,4 +23,6 @@ public interface UserServiceSP {
 	Long delete (Long id);
 	
 	Long updateSP(UserEntity user);
+	
+	List<UserEntity> usersByProfileId(Long profileId);
 }

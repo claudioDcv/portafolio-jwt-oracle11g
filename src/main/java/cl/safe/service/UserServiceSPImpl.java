@@ -1,5 +1,6 @@
 package cl.safe.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -62,6 +63,28 @@ public class UserServiceSPImpl implements UserServiceSP {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_by_email");
 		query.setParameter("p_email", email);
 		return (UserEntity) query.getSingleResult();
+	}
+
+	@Override
+	public List<UserEntity> usersByProfileId(Long profileId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_get_all_by_profile_id");
+		query.setParameter("p_id", profileId);
+
+        ArrayList<UserEntity> usuariosSinContrasena = new ArrayList<>();
+        
+        for (UserEntity userEntity : (List<UserEntity>)query.getResultList()) {
+        	userEntity.setHash("");
+        	userEntity.setProfiles(null );
+        	usuariosSinContrasena.add(userEntity);
+		}
+        
+        return usuariosSinContrasena;
+        
+        
+        /*
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_get_all");
+        return query.getResultList();
+        */
 	}
 
 }
