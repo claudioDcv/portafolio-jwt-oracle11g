@@ -20,21 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NamedStoredProcedureQueries({
-	@NamedStoredProcedureQuery(
-			name = "INFORME_TRABAJADOR_INSERT",
-			procedureName = "INFORME_TRABAJADOR_INSERT",
-			resultClasses= { InformeDetalleEntity.class},
-			parameters = {
-					@StoredProcedureParameter(name="P_TRABAJADOR_FK", mode = ParameterMode.IN, type = Long.class),
-					@StoredProcedureParameter(name="P_TECNICO_FK", mode = ParameterMode.IN, type = Long.class),
-					@StoredProcedureParameter(name="P_NOMBRE", mode = ParameterMode.IN, type = String.class),
-					@StoredProcedureParameter(name="P_SUPERVISOR_FK", mode = ParameterMode.IN, type = Long.class),
-					@StoredProcedureParameter(name="P_FECHA_REALIZACION", mode = ParameterMode.IN, type = Date.class),
-					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "O_ID", type = Long.class)
-			}
-	),
-})
+
 @Table(name="INFORMES_INSTALACION")
 @Entity
 @Getter

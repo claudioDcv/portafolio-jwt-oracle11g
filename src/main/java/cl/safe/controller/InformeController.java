@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.safe.config.Const;
 import cl.safe.config.Utils;
-import cl.safe.dto.InformeTrabajadorDto;
+import cl.safe.dto.InformeInstalacionDto;
+import cl.safe.dto.InformeInstalacionDtoRequest;
+import cl.safe.dto.InformeTrabajadorRequestDto;
 import cl.safe.dto.LoginRequest;
 import cl.safe.dto.ResponseDto;
 import cl.safe.entity.EmpresaEntity;
 import cl.safe.entity.InstalacionEntity;
+import cl.safe.entity.ObservacionEntity;
 import cl.safe.entity.TrabajadorEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.service.EmpresaService;
@@ -41,7 +44,7 @@ public class InformeController {
 	private UserServiceSP userServiceSP;
 
 	@PostMapping("/nuevo-trabajador")
-	public ResponseEntity<ResponseDto<Long>> saveInformeTrabajador(@RequestAttribute("claims") final Claims claims, @RequestBody @Valid final InformeTrabajadorDto informeTrabajadorDto) {
+	public ResponseEntity<ResponseDto<Long>> saveInformeTrabajador(@RequestAttribute("claims") final Claims claims, @RequestBody @Valid final InformeTrabajadorRequestDto informeTrabajadorDto) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 
 		if (Utils.hasProfile(user,
@@ -52,6 +55,59 @@ public class InformeController {
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}	
+		return Utils.responseUnauthorized();
+	}
+	
+	@PostMapping("/nueva-instalacion")
+	public ResponseEntity<ResponseDto<Long>> saveInformeInstalacion(@RequestAttribute("claims") final Claims claims, @RequestBody @Valid final InformeInstalacionDtoRequest informeInstalacionDto) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(user,
+				Const.TECNICO)) {
+			ResponseDto<Long> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.creacionInformeInstalacion(informeInstalacionDto));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}	
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/instalacion/{id}")
+	public ResponseEntity<ResponseDto<InformeInstalacionDto>> getByEmpresaId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user,
+				Const.ADMIN_SAFE,
+				Const.PREVENCIONISTA,
+				Const.TECNICO,
+				Const.SUPERVISOR)) {
+			ResponseDto<InformeInstalacionDto> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.getInformeInstalacionById(id));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/observaciones/informe-detalle/{id}")
+	public ResponseEntity<ResponseDto<List<ObservacionEntity>>> getObservacionesByInformeDetalleId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user,
+				Const.ADMIN_SAFE,
+				Const.PREVENCIONISTA,
+				Const.TECNICO,
+				Const.SUPERVISOR)) {
+			ResponseDto<List<ObservacionEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.getObservacionByInformeDetallerId(id));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
 		return Utils.responseUnauthorized();
 	}
 }

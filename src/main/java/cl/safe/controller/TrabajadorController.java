@@ -73,6 +73,4 @@ public class TrabajadorController {
 			
 		return Utils.responseUnauthorized();
 	}
-	// return trabajadorServicie.getByEmpresaIdSP(id);
-	//}
 }

@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class InformeTrabajadorDto {
+public class InformeInstalacionDtoRequest {
 	Integer confirmacionPrevencionista;
 	Date fechaConfirmacion;
 	Date fechaRealizacion;
@@ -22,5 +22,5 @@ public class InformeTrabajadorDto {
 	Long prevencionista;
 	Long supervisor;
 	Long tecnico;
-	Long trabajador;
+	Long instalacion;
 }
