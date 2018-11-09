@@ -3,7 +3,9 @@ package cl.safe.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
 import org.springframework.stereotype.Service;
@@ -11,21 +13,12 @@ import org.springframework.stereotype.Service;
 import cl.safe.dto.InformeInstalacionDto;
 import cl.safe.dto.InformeInstalacionDtoRequest;
 import cl.safe.dto.InformeTrabajadorRequestDto;
+import cl.safe.dto.ObservacionRequestDto;
 import cl.safe.entity.EmpresaEntity;
+import cl.safe.entity.InformeDetalleEntity;
 import cl.safe.entity.InstalacionEntity;
 import cl.safe.entity.ObservacionEntity;
 import cl.safe.entity.UserEntity;
-
-/*
-create or replace PROCEDURE INFORME_TRABAJADOR_INSERT(
-	    P_TRABAJADOR_FK IN INFORMES_TRABAJADOR.TRABAJADOR_FK%TYPE,
-	    P_TECNICO_FK IN INFORMES_DETALLES.TECNICO_FK%TYPE,
-	    P_NOMBRE IN INFORMES_DETALLES.NOMBRE%TYPE,
-	    P_SUPERVISOR_FK IN INFORMES_DETALLES.SUPERVISOR_FK%TYPE,
-	    P_FECHA_REALIZACION IN INFORMES_DETALLES.FECHA_REALIZACION%TYPE,
-	    O_ID OUT INFORMES_DETALLES.TECNICO_FK%TYPE)
-	AS
-*/
 
 @Service
 public class InformeServiceImpl implements InformeService {
@@ -69,6 +62,17 @@ public class InformeServiceImpl implements InformeService {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("OBSERVACION_BY_INFO_ID");
 		query.setParameter("P_ID", id);
 		return query.getResultList();
+	}
+
+	@Override
+	public Long creacionObservacionConInformeId(ObservacionRequestDto observacionRequestDto) {
+		System.out.println(observacionRequestDto);
+
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("OBSERVACION_INSERT");
+		query.setParameter("p_nombre", observacionRequestDto.getNombre());
+		query.setParameter("p_informe_detalle_fk", observacionRequestDto.getInformeId());
+		query.execute();
+		return (Long) query.getOutputParameterValue("o_id");
 	}
 	
 }

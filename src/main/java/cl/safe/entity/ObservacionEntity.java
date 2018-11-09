@@ -26,6 +26,16 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "OBSERVACION_INSERT",
+			procedureName = "OBSERVACION_INSERT",
+			resultClasses= { InformeDetalleEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_nombre", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_informe_detalle_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
 	)
 })
 @Entity
@@ -43,5 +53,8 @@ public class ObservacionEntity {
 	
 	@Column(name="informe_detalle_fk")
 	Long informeDetalle;
+	
+	@Column(name="recomendacion")
+	String recomendacion;
 	
 }

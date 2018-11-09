@@ -54,7 +54,7 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
 			}
-	),
+	)
 })
 @Table(name="INFORMES_DETALLES")
 @Entity

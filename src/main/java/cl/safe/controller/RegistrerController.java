@@ -12,15 +12,17 @@ import cl.safe.dto.UserJson;
 import cl.safe.service.UserService;
 
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/bla")
 public class RegistrerController {
 
   @Autowired
   private UserService userService;
 
+  /*
   @RequestMapping(method = RequestMethod.POST)
   public UserJson registerUser(@RequestBody @Valid final RegisterRequest registerRequest) throws NotFoundException {
     return userService.registerUser(registerRequest.getEmail(), registerRequest.getPassword(), registerRequest.getName(), registerRequest.getSurname());
   }
+  */
 
 }

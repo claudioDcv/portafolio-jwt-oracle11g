@@ -66,6 +66,7 @@ import lombok.ToString;
 			parameters = {
 					@StoredProcedureParameter(name="p_EMAIL", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_DISPLAY_NAME", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_LAST_NAME", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_PASSWORD", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="o_USER_ID", mode = ParameterMode.OUT, type = Long.class)
 			}

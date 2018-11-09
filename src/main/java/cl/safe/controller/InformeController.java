@@ -21,6 +21,7 @@ import cl.safe.dto.InformeInstalacionDto;
 import cl.safe.dto.InformeInstalacionDtoRequest;
 import cl.safe.dto.InformeTrabajadorRequestDto;
 import cl.safe.dto.LoginRequest;
+import cl.safe.dto.ObservacionRequestDto;
 import cl.safe.dto.ResponseDto;
 import cl.safe.entity.EmpresaEntity;
 import cl.safe.entity.InstalacionEntity;
@@ -108,6 +109,21 @@ public class InformeController {
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}
 			
+		return Utils.responseUnauthorized();
+	}
+	
+	@PostMapping("/observaciones")
+	public ResponseEntity<ResponseDto<Long>> saveInformeInstalacion(@RequestAttribute("claims") final Claims claims, @RequestBody @Valid final ObservacionRequestDto observacionRequestDto) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(user,
+				Const.TECNICO)) {
+			ResponseDto<Long> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.creacionObservacionConInformeId(observacionRequestDto));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}	
 		return Utils.responseUnauthorized();
 	}
 }

@@ -1,6 +1,8 @@
 package cl.safe.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +43,25 @@ import lombok.ToString;
 			parameters = {
 					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "us_prof_delete_all_by_us",
+			procedureName = "us_prof_delete_all_by_us",
+			resultClasses= { Profile.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="O_ID", mode = ParameterMode.OUT, type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "USER_PROFILES_INSERT",
+			procedureName = "USER_PROFILES_INSERT",
+			resultClasses= { Profile.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_profile", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="o_id", mode = ParameterMode.OUT, type = Long.class)
 			}
 	)
 })
