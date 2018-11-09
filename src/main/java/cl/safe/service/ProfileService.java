@@ -10,4 +10,6 @@ public interface ProfileService {
 	List<Profile> getProfileUserByUserId(Long id);
 
 	List<Profile> getAllProfiles();
+	
+	Long asignarPerfilesConUsuarioId(List<Long> perfiles, Long usuarioId );
 }

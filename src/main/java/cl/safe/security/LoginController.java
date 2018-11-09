@@ -1,5 +1,6 @@
 package cl.safe.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
@@ -15,17 +16,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.safe.config.Const;
 import cl.safe.config.Utils;
 import cl.safe.dto.LoginDto;
 import cl.safe.dto.LoginRequest;
+import cl.safe.dto.RegisterRequest;
 import cl.safe.dto.ResponseDto;
+import cl.safe.dto.UserJson;
 import cl.safe.entity.UserEntity;
 import cl.safe.service.UserService;
+import cl.safe.service.UserServiceSP;
 
 @RestController
 public class LoginController {
@@ -35,6 +44,9 @@ public class LoginController {
 
   @Autowired
   private UserService userService;
+  
+  @Autowired
+ private UserServiceSP userServiceSP;
 
   @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseDto<LoginDto>> login(@RequestBody @Valid final LoginRequest login) throws ServletException {
@@ -61,5 +73,5 @@ public class LoginController {
 	responseDto.setStatus(HttpStatus.OK);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
-
+  
 }

@@ -8,5 +8,5 @@ import cl.safe.entity.InstalacionEntity;
 public interface InstalacionService {
 
 	public List<InstalacionEntity> getAllSP();
-	
+	public List<InstalacionEntity> getAllByEmpresaId(Long id);
 }

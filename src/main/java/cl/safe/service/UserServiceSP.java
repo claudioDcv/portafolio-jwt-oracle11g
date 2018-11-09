@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import cl.safe.dto.RegisterRequest;
 import cl.safe.entity.UserEntity;
 
 @Service
@@ -23,4 +24,8 @@ public interface UserServiceSP {
 	Long delete (Long id);
 	
 	Long updateSP(UserEntity user);
+	
+	List<UserEntity> usersByProfileId(Long profileId);
+	
+	Long saveSP(RegisterRequest user);
 }

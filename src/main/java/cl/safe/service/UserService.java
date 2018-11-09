@@ -1,11 +1,15 @@
 package cl.safe.service;
 
 import io.vavr.control.Option;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.safe.controller.NotFoundException;
 import cl.safe.dto.UserJson;
+import cl.safe.entity.Profile;
 import cl.safe.entity.UserEntity;
 import cl.safe.repository.UserRepository;
 import cl.safe.security.PasswordUtils;
@@ -34,13 +38,13 @@ public class UserService {
         .getOrElseThrow(NotFoundException::new);
   }
 
-  public UserJson registerUser(final String email, final String password, final String name, final String surname) {
+  public UserJson registerUser(final String email, final String password, final String name, final String surname, List<Profile> profiles) {
     final UserEntity user = UserEntity.builder()
-    		.id((long) 1)
         .email(email)
         .name(name)
         .surname(surname)
         .hash(PasswordUtils.createHash(password))
+        .profiles(profiles)
         .build();
     final UserEntity savedUser = userRepository.save(user);
     return UserBuilder.buildUserJson(savedUser);

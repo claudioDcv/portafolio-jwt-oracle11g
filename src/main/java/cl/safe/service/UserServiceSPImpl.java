@@ -1,15 +1,20 @@
 package cl.safe.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cl.safe.dto.RegisterRequest;
 import cl.safe.entity.UserEntity;
+import cl.safe.security.PasswordUtils;
 
 @Service
 public class UserServiceSPImpl implements UserServiceSP {
@@ -62,6 +67,41 @@ public class UserServiceSPImpl implements UserServiceSP {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_by_email");
 		query.setParameter("p_email", email);
 		return (UserEntity) query.getSingleResult();
+	}
+
+	@Override
+	public List<UserEntity> usersByProfileId(Long profileId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_get_all_by_profile_id");
+		query.setParameter("p_id", profileId);
+
+        ArrayList<UserEntity> usuariosSinContrasena = new ArrayList<>();
+        
+        for (UserEntity userEntity : (List<UserEntity>)query.getResultList()) {
+        	userEntity.setHash("");
+        	userEntity.setProfiles(null );
+        	usuariosSinContrasena.add(userEntity);
+		}
+        
+        return usuariosSinContrasena;
+        
+        
+        /*
+		@StoredProcedureParameter(name="p_EMAIL", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_DISPLAY_NAME", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_PASSWORD", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="o_USER_ID", mode = ParameterMode.OUT, type = Long.class)
+        */
+	}
+
+	@Override
+	public Long saveSP(RegisterRequest user) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_insert");
+		query.setParameter("p_EMAIL", user.getEmail());
+		query.setParameter("p_DISPLAY_NAME", user.getName());
+		query.setParameter("p_LAST_NAME", user.getSurname());
+		query.setParameter("p_PASSWORD", PasswordUtils.createHash(user.getPassword()));
+		query.execute();
+		return (Long) query.getOutputParameterValue("o_USER_ID");
 	}
 
 }

@@ -33,6 +33,15 @@ import lombok.ToString;
 			}
 	),
 	@NamedStoredProcedureQuery(
+			name = "users_get_all_by_profile_id",
+			procedureName = "users_get_all_by_profile_id",
+			resultClasses= { UserEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
 			name = "users_by_id",
 			procedureName = "users_by_id",
 			resultClasses= { UserEntity.class},
@@ -57,6 +66,7 @@ import lombok.ToString;
 			parameters = {
 					@StoredProcedureParameter(name="p_EMAIL", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_DISPLAY_NAME", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_LAST_NAME", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_PASSWORD", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="o_USER_ID", mode = ParameterMode.OUT, type = Long.class)
 			}

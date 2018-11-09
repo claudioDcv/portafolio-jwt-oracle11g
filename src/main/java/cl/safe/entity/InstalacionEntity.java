@@ -27,6 +27,14 @@ import lombok.Setter;
 			parameters = {
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
 			}
+	),
+	@NamedStoredProcedureQuery(name = "INSTALACIONES_BY_EMPRESA_ID",
+	    procedureName = "INSTALACIONES_BY_EMPRESA_ID",
+		resultClasses = InstalacionEntity.class,
+		parameters = {
+				@StoredProcedureParameter(name="p_id", mode = ParameterMode.IN, type = Long.class),
+				@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+		}
 	)
 })
 @Entity
