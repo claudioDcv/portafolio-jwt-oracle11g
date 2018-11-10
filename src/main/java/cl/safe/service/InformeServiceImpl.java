@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import cl.safe.dto.InformeInstalacionDto;
 import cl.safe.dto.InformeInstalacionDtoRequest;
+import cl.safe.dto.InformeTrabajadorDto;
 import cl.safe.dto.InformeTrabajadorRequestDto;
 import cl.safe.dto.ObservacionRequestDto;
 import cl.safe.entity.EmpresaEntity;
@@ -75,4 +76,21 @@ public class InformeServiceImpl implements InformeService {
 		return (Long) query.getOutputParameterValue("o_id");
 	}
 	
+	@Override
+	public List<InformeTrabajadorDto> getAllInformeTrabajadorByEstado(Long id, Long empresa, Long estado) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_trabajador_by_estado");
+		query.setParameter("P_ID", id);
+		query.setParameter("P_ID_EMPRESA", empresa);
+		query.setParameter("P_ESTADO", estado);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<InformeInstalacionDto> getAllInformeInstalacionyEstado(Long id, Long empresa, Long estado) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_instalacion_by_estado");
+		query.setParameter("P_ID", id);
+		query.setParameter("P_ID_EMPRESA", empresa);
+		query.setParameter("P_ESTADO", estado);
+		return query.getResultList();
+	}
 }

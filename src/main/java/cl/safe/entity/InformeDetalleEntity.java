@@ -14,6 +14,7 @@ import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
 import cl.safe.dto.InformeInstalacionDto;
+import cl.safe.dto.InformeTrabajadorDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,28 @@ import lombok.Setter;
 			parameters = {
 					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "info_trabajador_by_estado",
+			procedureName = "info_trabajador_by_estado",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ID_EMPRESA", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ESTADO", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "info_instalacion_by_estado",
+			procedureName = "info_instalacion_by_estado",
+			resultClasses= { InformeInstalacionDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ID_EMPRESA", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ESTADO", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 			}
 	)
 })

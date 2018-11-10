@@ -19,6 +19,7 @@ import cl.safe.config.Const;
 import cl.safe.config.Utils;
 import cl.safe.dto.InformeInstalacionDto;
 import cl.safe.dto.InformeInstalacionDtoRequest;
+import cl.safe.dto.InformeTrabajadorDto;
 import cl.safe.dto.InformeTrabajadorRequestDto;
 import cl.safe.dto.LoginRequest;
 import cl.safe.dto.ObservacionRequestDto;
@@ -124,6 +125,42 @@ public class InformeController {
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}	
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/trabajador/por-estado/{empresa}/{estado}")
+	public ResponseEntity<ResponseDto<List<InformeTrabajadorDto>>> getAllInformesTrabajadorByEstado(@RequestAttribute("claims") final Claims claims, @PathVariable(name="empresa") Long empresa, @PathVariable(name="estado") Long estado) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user,
+				Const.PREVENCIONISTA,
+				Const.TECNICO,
+				Const.SUPERVISOR)) {
+			ResponseDto<List<InformeTrabajadorDto>> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.getAllInformeTrabajadorByEstado(user.getId(),empresa, estado));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/instalacion/por-estado/{empresa}/{estado}")
+	public ResponseEntity<ResponseDto<List<InformeInstalacionDto>>> getAllInformesInstalacionByEstado(@RequestAttribute("claims") final Claims claims, @PathVariable(name="empresa") Long empresa, @PathVariable(name="estado") Long estado) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user,
+				Const.PREVENCIONISTA,
+				Const.TECNICO,
+				Const.SUPERVISOR)) {
+			ResponseDto<List<InformeInstalacionDto>> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.getAllInformeInstalacionyEstado(user.getId(),empresa, estado));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
 		return Utils.responseUnauthorized();
 	}
 }
