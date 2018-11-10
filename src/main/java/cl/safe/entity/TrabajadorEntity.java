@@ -20,6 +20,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NamedStoredProcedureQueries({
+	@NamedStoredProcedureQuery(name = "trabajador_insert",
+            procedureName = "trabajador_insert",
+			resultClasses = TrabajadorEntity.class,
+			parameters = {
+					@StoredProcedureParameter(name="p_apellido_materno", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_apellido_paterno", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_email", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_nombre", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_run", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_ID", type = Long.class)
+			}
+	),
 	@NamedStoredProcedureQuery(name = "TRABAJADORES_BY_EMPRESA_FK",
             procedureName = "TRABAJADORES_BY_EMPRESA_FK",
 			resultClasses = TrabajadorEntity.class,

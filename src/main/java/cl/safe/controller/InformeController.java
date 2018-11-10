@@ -76,7 +76,7 @@ public class InformeController {
 	}
 	
 	@GetMapping("/instalacion/{id}")
-	public ResponseEntity<ResponseDto<InformeInstalacionDto>> getByEmpresaId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+	public ResponseEntity<ResponseDto<InformeInstalacionDto>> getInformeInstalacionById(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		
 		if (Utils.hasProfile(user,
@@ -93,6 +93,26 @@ public class InformeController {
 			
 		return Utils.responseUnauthorized();
 	}
+	
+	@GetMapping("/trabajador/{id}")
+	public ResponseEntity<ResponseDto<InformeTrabajadorDto>> getInformeTrabajadorById(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user,
+				Const.ADMIN_SAFE,
+				Const.PREVENCIONISTA,
+				Const.TECNICO,
+				Const.SUPERVISOR)) {
+			ResponseDto<InformeTrabajadorDto> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.getInformeTrabajadorById(id));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
 	
 	@GetMapping("/observaciones/informe-detalle/{id}")
 	public ResponseEntity<ResponseDto<List<ObservacionEntity>>> getObservacionesByInformeDetalleId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
@@ -156,6 +176,21 @@ public class InformeController {
 				Const.SUPERVISOR)) {
 			ResponseDto<List<InformeInstalacionDto>> rdto = new ResponseDto<>();
 			rdto.setObj(informeService.getAllInformeInstalacionyEstado(user.getId(),empresa, estado));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/solicitar-revision-informe-detalle-id/{informeDetalleId}")
+	public ResponseEntity<ResponseDto<Boolean>> getAllInformesInstalacionByEstado(@RequestAttribute("claims") final Claims claims, @PathVariable(name="informeDetalleId") Long informeDetalleId) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user, Const.TECNICO)) {
+			ResponseDto<Boolean> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.solicitarRevisionInformeDetalle(informeDetalleId, user.getId()));
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);

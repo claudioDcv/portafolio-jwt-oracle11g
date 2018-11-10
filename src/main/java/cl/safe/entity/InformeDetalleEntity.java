@@ -57,6 +57,15 @@ import lombok.Setter;
 			}
 	),
 	@NamedStoredProcedureQuery(
+			name = "informe_trabajador_by_id",
+			procedureName = "informe_trabajador_by_id",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
 			name = "info_trabajador_by_estado",
 			procedureName = "info_trabajador_by_estado",
 			resultClasses= { InformeTrabajadorDto.class},
@@ -77,7 +86,17 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="P_ESTADO", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 			}
-	)
+	),
+	@NamedStoredProcedureQuery(
+			name = "solicitud_revision_ifo_deta",
+			procedureName = "solicitud_revision_ifo_deta",
+			resultClasses= { InformeDetalleEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_TECNICO_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "O_RESULT", type = Integer.class)
+			}
+	),
 })
 @Table(name="INFORMES_DETALLES")
 @Entity

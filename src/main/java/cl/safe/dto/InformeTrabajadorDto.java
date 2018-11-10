@@ -35,7 +35,8 @@ public class InformeTrabajadorDto {
 	TrabajadorEntity trabajador;
 	
 	Integer confirmacionPrevencionista;
-
+	Boolean solicitarRevision;
+	
 	Date fechaConfirmacion;
 	Date fechaRealizacion;
 

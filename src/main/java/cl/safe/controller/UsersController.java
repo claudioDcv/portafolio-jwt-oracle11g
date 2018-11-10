@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import cl.safe.dto.ProfilesRequestDto;
 import cl.safe.dto.RegisterRequest;
 import cl.safe.dto.ResponseDto;
 import cl.safe.dto.UserJson;
+import cl.safe.dto.UserUpdateRequestDto;
 import cl.safe.entity.UserEntity;
 import cl.safe.service.ProfileService;
 import cl.safe.service.UserService;
@@ -131,6 +133,23 @@ public class UsersController {
 		
 		if (user.getId() == profilesRequestDto.getUsuario()) {
 			return Utils.responseUnauthorized("Usted no puede cambiar sus propios permisos, otro administrador debe realizar esta acción");
+		}
+		return Utils.responseUnauthorized();
+	}
+	
+	// update de medico
+	@PutMapping("/{id}")
+	public ResponseEntity<ResponseDto<Long>> actualizarUsuario(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id, @RequestBody @Valid final UserEntity updateUser) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		if (Utils.hasProfile(user, Const.ADMIN_SAFE)) {
+			ResponseDto<Long> rdto = new ResponseDto<>();
+
+			updateUser.setId(id);
+			
+			rdto.setObj(userServiceSP.updateSP(updateUser));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}
 		return Utils.responseUnauthorized();
 	}

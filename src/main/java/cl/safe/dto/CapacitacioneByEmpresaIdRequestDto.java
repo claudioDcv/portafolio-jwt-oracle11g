@@ -9,6 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CapacitacioneRequestDto {
+public class CapacitacioneByEmpresaIdRequestDto {
 	Long empresaId;
 }

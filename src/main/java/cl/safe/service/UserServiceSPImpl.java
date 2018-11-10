@@ -44,6 +44,7 @@ public class UserServiceSPImpl implements UserServiceSP {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_update");
 		query.setParameter("p_EMAIL", user.getEmail());
 		query.setParameter("p_DISPLAY_NAME", user.getName());
+		query.setParameter("p_SURNAME", user.getSurname());
 		query.setParameter("p_USER_ID", user.getId());
 		query.execute();
 		return (Long) query.getOutputParameterValue("o_USER_ID");

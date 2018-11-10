@@ -8,4 +8,5 @@ public interface EmpresaService {
 
 	public List<EmpresaEntity> getAllSP();
 	public EmpresaEntity findOne(Long id);
+	Long crearEmpresa(EmpresaEntity empresaEntity);
 }

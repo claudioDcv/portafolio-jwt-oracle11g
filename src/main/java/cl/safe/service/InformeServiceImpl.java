@@ -1,10 +1,12 @@
 package cl.safe.service;
 
+import java.lang.annotation.Native;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
@@ -92,5 +94,22 @@ public class InformeServiceImpl implements InformeService {
 		query.setParameter("P_ID_EMPRESA", empresa);
 		query.setParameter("P_ESTADO", estado);
 		return query.getResultList();
+	}
+	
+	@Override
+	public Boolean solicitarRevisionInformeDetalle(Long informeDetalleId, Long tecnicoId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("solicitud_revision_ifo_deta");
+		query.setParameter("P_TECNICO_ID", tecnicoId);
+		query.setParameter("P_ID", informeDetalleId);
+		query.execute();
+		Integer result = (Integer) query.getOutputParameterValue("O_RESULT");
+		return result != 0;
+	}
+
+	@Override
+	public InformeTrabajadorDto getInformeTrabajadorById(Long id) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("informe_trabajador_by_id");
+		query.setParameter("P_ID", id);
+		return (InformeTrabajadorDto) query.getSingleResult();
 	}
 }

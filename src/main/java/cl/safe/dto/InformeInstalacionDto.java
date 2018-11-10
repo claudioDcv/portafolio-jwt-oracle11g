@@ -34,6 +34,7 @@ public class InformeInstalacionDto {
 	InstalacionEntity instalacion;
 	
 	Integer confirmacionPrevencionista;
+	Boolean solicitarRevision;
 
 	Date fechaConfirmacion;
 	Date fechaRealizacion;
