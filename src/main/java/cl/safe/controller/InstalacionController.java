@@ -36,7 +36,8 @@ public class InstalacionController {
 	private UserServiceSP userServiceSP;
 
 	@GetMapping("")
-	public ResponseEntity<ResponseDto<List<InstalacionEntity>>> getAll(@RequestAttribute("claims") final Claims claims) {
+	public ResponseEntity<ResponseDto<List<InstalacionEntity>>> getAll(
+			@RequestAttribute("claims") final Claims claims) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 
 		if (Utils.hasProfile(user,
@@ -57,7 +58,9 @@ public class InstalacionController {
 	}
 	
 	@GetMapping("/empresa/{id}")
-	public ResponseEntity<ResponseDto<List<InstalacionEntity>>> getByEmpresaId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+	public ResponseEntity<ResponseDto<List<InstalacionEntity>>> getByEmpresaId(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="id") Long id) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		
 		if (Utils.hasProfile(user,
