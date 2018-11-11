@@ -1,6 +1,7 @@
 package cl.safe.controller;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.validation.Valid;
 
@@ -187,6 +188,28 @@ public class VisitaMedicaController {
 					examenConsultaMedicaRequestDto.getConsultaMedicaId(),
 					examenConsultaMedicaRequestDto.getExamenId()
 			));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+		return Utils.responseUnauthorized();
+	}
+	
+	// TODO implementar servicio real de validacion
+	@GetMapping("/validar-medico/{rut}")
+	public ResponseEntity<ResponseDto<Boolean>> validarMedico(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="rut") Long rut) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user,
+				Const.ADMIN_SAFE,
+				Const.MEDICO,
+				Const.SUPERVISOR,
+				Const.EXAMINADOR)) {
+			Random random = new Random();
+			ResponseDto<Boolean> rdto = new ResponseDto<>();
+			rdto.setObj(random.nextBoolean());
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
