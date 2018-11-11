@@ -158,6 +158,8 @@ public class InformeServiceImpl implements InformeService {
 	@Override
 	public List<InformeTrabajadorDto> getAllInformeTrabajadorByEstadoPrevencionistaId(Long preveId, Long idEmpresa,
 			Long estado) {
+		
+		// estado se refiere a la confirmacion del prevencionista -1 0 1
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_trabajador_by_preve");
 		query.setParameter("p_id_preve", preveId);
 		query.setParameter("P_ID_EMPRESA", idEmpresa);

@@ -228,7 +228,7 @@ public class InformeController {
 
 	// asignar prevencionista a informe detalle
 	@GetMapping("/asignar-prevencionista/{informeDetalleId}/{prevencionistaId}")
-	public ResponseEntity<ResponseDto<Long>> getAllInformeInstalacionyBySupervisorId(
+	public ResponseEntity<ResponseDto<Long>> asignarPrevencionista(
 			@RequestAttribute("claims") final Claims claims,
 			@PathVariable(name = "informeDetalleId") Long informeDetalleId,
 			@PathVariable(name = "prevencionistaId") Long prevencionistaId) {

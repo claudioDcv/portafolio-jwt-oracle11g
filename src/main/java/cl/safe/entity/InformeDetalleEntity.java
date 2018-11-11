@@ -148,7 +148,7 @@ import lombok.Setter;
 	@NamedStoredProcedureQuery(
 			name = "info_instalacion_by_preve",
 			procedureName = "info_instalacion_by_preve",
-			resultClasses= { InformeTrabajadorDto.class},
+			resultClasses= { InformeInstalacionDto.class},
 			parameters = {
 					@StoredProcedureParameter(name="p_id_preve", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(name="P_ID_EMPRESA", mode = ParameterMode.IN, type = Long.class),
