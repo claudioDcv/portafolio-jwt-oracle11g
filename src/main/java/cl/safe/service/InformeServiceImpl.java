@@ -81,6 +81,7 @@ public class InformeServiceImpl implements InformeService {
 	@Override
 	public List<InformeTrabajadorDto> getAllInformeTrabajadorByEstado(Long id, Long empresa, Long estado) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_trabajador_by_estado");
+		// el id es el del usario tecnico
 		query.setParameter("P_ID", id);
 		query.setParameter("P_ID_EMPRESA", empresa);
 		query.setParameter("P_ESTADO", estado);
@@ -128,4 +129,60 @@ public class InformeServiceImpl implements InformeService {
 		query.setParameter("p_empresa_fk", idEmpresa);
 		return query.getResultList();
 	}
+
+	@Override
+	public Long asignarPrevencionista(Long informeDetalleId, Long prevencionistaId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("informe_det_asig_preve");
+		query.setParameter("p_prevencionista_id", prevencionistaId);
+		query.setParameter("p_detalle_id", informeDetalleId);
+		query.execute();
+		return (Long) query.getOutputParameterValue("o_id");
+	}
+
+	@Override
+	public Long rechazarInformeDetalle(Long informeDetalleId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("informe_detalle_rechaz");
+		query.setParameter("p_detalle_id", informeDetalleId);
+		query.execute();
+		return (Long) query.getOutputParameterValue("o_id");
+	}
+
+	@Override
+	public Long aprobarInformeDetalle(Long informeDetalleId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("informe_detalle_aprob");
+		query.setParameter("p_detalle_id", informeDetalleId);
+		query.execute();
+		return (Long) query.getOutputParameterValue("o_id");
+	}
+
+	@Override
+	public List<InformeTrabajadorDto> getAllInformeTrabajadorByEstadoPrevencionistaId(Long preveId, Long idEmpresa,
+			Long estado) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_trabajador_by_preve");
+		query.setParameter("p_id_preve", preveId);
+		query.setParameter("P_ID_EMPRESA", idEmpresa);
+		query.setParameter("P_ESTADO", estado);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<InformeInstalacionDto> getAllInformeInstalacionyByEstadoPrevencionistaId(Long preveId, Long idEmpresa,
+			Long estado) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_instalacion_by_preve");
+		query.setParameter("p_id_preve", preveId);
+		query.setParameter("P_ID_EMPRESA", idEmpresa);
+		query.setParameter("P_ESTADO", estado);
+		return query.getResultList();
+	}
+
+	@Override
+	public Long agregarRecomendacionParaObservacionPorPreve(String observacion, Long observacionId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("observ_update_by_preve");
+		query.setParameter("p_observacion_id", observacionId);
+		query.setParameter("p_recomendacion", observacion);
+		query.execute();
+		return (Long) query.getOutputParameterValue("o_id");
+	}
+	
+	
 }

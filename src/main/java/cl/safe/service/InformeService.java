@@ -22,4 +22,13 @@ public interface InformeService {
 	List<InformeTrabajadorDto> getAllInformeTrabajadorBySupervisorId(Long supervisorId, Long idEmpresa);
 	List<InformeInstalacionDto> getAllInformeInstalacionyBySupervisorId(Long supervisorId, Long idEmpresa);
 	
+	Long asignarPrevencionista(Long informeDetalleId, Long prevencionistaId);
+	
+	Long rechazarInformeDetalle(Long informeDetalleId);
+	Long aprobarInformeDetalle(Long informeDetalleId);
+	
+	List<InformeTrabajadorDto> getAllInformeTrabajadorByEstadoPrevencionistaId(Long preveId, Long idEmpresa, Long estado);
+	List<InformeInstalacionDto> getAllInformeInstalacionyByEstadoPrevencionistaId(Long preveId, Long idEmpresa, Long estado);
+
+	Long agregarRecomendacionParaObservacionPorPreve(String observacion, Long observacionId);
 }

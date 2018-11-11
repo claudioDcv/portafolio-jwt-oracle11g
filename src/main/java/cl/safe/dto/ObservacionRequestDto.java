@@ -11,4 +11,5 @@ public class ObservacionRequestDto {
 	Long id;
 	Long informeId;
 	String nombre;
+	String recomendacion;
 }

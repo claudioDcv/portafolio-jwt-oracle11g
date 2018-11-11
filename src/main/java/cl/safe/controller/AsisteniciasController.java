@@ -58,7 +58,7 @@ public class AsisteniciasController {
 			return Utils.responseUnauthorized("No se puede inscribir, esta capacitacion se he cerrado");
 		}
 		
-		if (Utils.hasProfile(u, Const.EXAMINADOR) && estadoCapacitacion == 0) {
+		if (Utils.hasProfile(u, Const.SUPERVISOR) && estadoCapacitacion == 0) {
 			ResponseDto<Long> rdto = new ResponseDto<>();
 			rdto.setObj(asistenciaService.inscribirEnCapacitacion(
 					asistenciaRequestDto.getTrabajadorId(),
