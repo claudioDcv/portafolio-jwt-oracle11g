@@ -60,6 +60,14 @@ import lombok.Setter;
 			@StoredProcedureParameter(name="p_asistentes_minimos", mode = ParameterMode.IN, type = Integer.class),
 			@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_ID", type = Long.class)
 		}
+	),
+	@NamedStoredProcedureQuery(name = "capacitacion_cerrar",
+    procedureName = "capacitacion_cerrar",
+	resultClasses = CapacitacionEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_capacitacion_id", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.OUT, name = "p_id", type = Long.class)
+		}
 	)
 })
 @Table(name="CAPACITACIONES")
@@ -97,4 +105,7 @@ public class CapacitacionEntity {
 	
 	@Column(name="FECHA_REALIZACION")
 	Date fechaRealizacion;
+	
+	@Column(name="ESTADO")
+	Integer estado;
 }

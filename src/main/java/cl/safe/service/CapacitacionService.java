@@ -12,5 +12,6 @@ public interface CapacitacionService {
 
 	public List<AsistenciaTrabajadorEntity> findAllAsistentesByCapacitacionId(Long capacitacionId);
 	Long crearCapacitacion(CapacitacionRequestDto capacitacionEntity);
+	Long cerrarCapacitacion(Long capacitacionId);
 	
 }

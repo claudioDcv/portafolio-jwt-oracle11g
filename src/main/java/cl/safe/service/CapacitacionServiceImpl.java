@@ -96,4 +96,12 @@ public class CapacitacionServiceImpl implements CapacitacionService {
 		return (Long) query.getOutputParameterValue("o_ID");
 	}
 
+	@Override
+	public Long cerrarCapacitacion(Long capacitacionId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("capacitacion_cerrar");
+		query.setParameter("p_capacitacion_id", capacitacionId);
+		query.execute();
+		return (Long) query.getOutputParameterValue("p_id");
+	}
+
 }

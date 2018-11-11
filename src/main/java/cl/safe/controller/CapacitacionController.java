@@ -122,4 +122,19 @@ public class CapacitacionController {
 			
 		return Utils.responseUnauthorized();
 	}
+	
+	@GetMapping("/cerrar-capacitacion/{capacitacionId}")
+	public ResponseEntity<ResponseDto<Long>> cerrarCapacitacion(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="capacitacionId") Long capacitacionId) {
+		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(u, Const.EXAMINADOR)) {
+			ResponseDto<Long> rdto = new ResponseDto<>();
+			rdto.setObj(capacitacionService.cerrarCapacitacion(capacitacionId));
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
 }
