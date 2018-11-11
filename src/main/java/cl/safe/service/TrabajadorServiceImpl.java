@@ -55,4 +55,24 @@ public class TrabajadorServiceImpl implements TrabajadorService{
 		query.execute();
 		return (Long) query.getOutputParameterValue("o_ID");
 	}
+
+	@Override
+	public Long asignarRiesgosConTrabajadorId(List<Long> riesgosIds, Long trabajadorId) {
+		System.out.println("----- ELIMINAR TODOS LOS riesgos DE trabajador --------");
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("trab_riesgo_del_by_us_id");
+
+		System.out.println(riesgosIds);
+		query.setParameter("p_id", trabajadorId);
+		query.execute();
+		
+		for (Long riesgoId : riesgosIds) {
+			System.out.println("----- AGREGANDO riesgos A trabajador --------");
+			StoredProcedureQuery queryRiesgos = em.createNamedStoredProcedureQuery("trabajador_riesgo_insert");
+			queryRiesgos.setParameter("p_riesgo_FK", riesgoId);
+			queryRiesgos.setParameter("p_trabajador_fk", trabajadorId);
+			queryRiesgos.execute();
+		}
+
+		return (Long) query.getOutputParameterValue("O_ID");
+	}
 }

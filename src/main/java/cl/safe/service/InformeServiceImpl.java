@@ -112,4 +112,20 @@ public class InformeServiceImpl implements InformeService {
 		query.setParameter("P_ID", id);
 		return (InformeTrabajadorDto) query.getSingleResult();
 	}
+
+	@Override
+	public List<InformeTrabajadorDto> getAllInformeTrabajadorBySupervisorId(Long supervisorId, Long idEmpresa) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("informes_trab_by_super");
+		query.setParameter("p_supervisor_id", supervisorId);
+		query.setParameter("p_empresa_fk", idEmpresa);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<InformeInstalacionDto> getAllInformeInstalacionyBySupervisorId(Long supervisorId, Long idEmpresa) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("informes_instal_by_super");
+		query.setParameter("p_supervisor_id", supervisorId);
+		query.setParameter("p_empresa_fk", idEmpresa);
+		return query.getResultList();
+	}
 }

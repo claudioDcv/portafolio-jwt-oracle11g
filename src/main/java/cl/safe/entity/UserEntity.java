@@ -128,4 +128,5 @@ public class UserEntity implements Serializable {
 		)
 	)
 	@Getter @Setter List<Profile> profiles;
+	
 }

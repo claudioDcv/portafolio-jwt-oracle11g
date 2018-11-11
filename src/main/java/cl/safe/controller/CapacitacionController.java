@@ -22,7 +22,7 @@ import cl.safe.dto.CapacitacioneByEmpresaIdRequestDto;
 import cl.safe.dto.InformeInstalacionDtoRequest;
 import cl.safe.dto.ResponseDto;
 import cl.safe.dto.VisitaMedicaRequestDto;
-import cl.safe.entity.AsistenciaUsuarioEntity;
+import cl.safe.entity.AsistenciaTrabajadorEntity;
 import cl.safe.entity.CapacitacionEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.entity.VisitaMedicaEntity;
@@ -85,11 +85,11 @@ public class CapacitacionController {
 	}
 	
 	@GetMapping("/asistencias/{id}")
-	public ResponseEntity<ResponseDto<List<AsistenciaUsuarioEntity>>> asistenciasByCapacitacionId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+	public ResponseEntity<ResponseDto<List<AsistenciaTrabajadorEntity>>> asistenciasByCapacitacionId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
 		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
 
 		if (Utils.hasProfile(u, Const.ADMIN_SAFE, Const.EXAMINADOR, Const.SUPERVISOR)) {
-			ResponseDto<List<AsistenciaUsuarioEntity>> rdto = new ResponseDto<>();
+			ResponseDto<List<AsistenciaTrabajadorEntity>> rdto = new ResponseDto<>();
 			rdto.setObj(capacitacionService.findAllAsistentesByCapacitacionId(id));
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}

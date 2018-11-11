@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.safe.dto.CapacitacionRequestDto;
-import cl.safe.entity.AsistenciaUsuarioEntity;
+import cl.safe.entity.AsistenciaTrabajadorEntity;
 import cl.safe.entity.CapacitacionEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.repository.EmpresaRepository;
@@ -68,7 +68,7 @@ public class CapacitacionServiceImpl implements CapacitacionService {
 	}
 
 	@Override
-	public List<AsistenciaUsuarioEntity> findAllAsistentesByCapacitacionId(Long capacitacionId) {
+	public List<AsistenciaTrabajadorEntity> findAllAsistentesByCapacitacionId(Long capacitacionId) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("asistencias_get_all_by_cap_id");
 		query.setParameter("P_ID", capacitacionId);
 		return query.getResultList();

@@ -22,7 +22,9 @@ public class Utils {
 
 	public static final Boolean hasProfile(UserEntity user, String... profiles) {
 		Boolean hasValidProfile = Boolean.FALSE;
+		System.out.println("---> hasProfile");
 		for (Profile profile : user.getProfiles()) {
+			System.out.println("----> " + profile.getDisplayName());
 			for (String compareProf : profiles) {
 				if (profile.getNaturalKey().equals(compareProf)) {
 					hasValidProfile = Boolean.TRUE;

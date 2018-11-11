@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +42,24 @@ public class VisitaMedicaController {
 		if (Utils.hasProfile(u, Const.ADMIN_SAFE, Const.MEDICO, Const.SUPERVISOR)) {
 			ResponseDto<List<VisitaMedicaEntity>> rdto = new ResponseDto<>();
 			rdto.setObj(visitaMedicaService.findAllByEmpresaMedicoConfirmacionSP(visitaMedicaRequestDto.getEmpresaId(), u.getId(), visitaMedicaRequestDto.getConfirmacion()));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+
+	}
+	
+	@GetMapping("/supervisor/{empresaId}")
+	public ResponseEntity<ResponseDto<List<VisitaMedicaEntity>>> misVisitasMedicasSupervisor(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="empresaId") Long empresaId) {
+		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(u, Const.SUPERVISOR)) {
+			ResponseDto<List<VisitaMedicaEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(visitaMedicaService.findAllByEmpresaSupervisorSP(empresaId, u.getId()));
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);

@@ -34,6 +34,15 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="P_CONFIRMACION_MEDICO", mode = ParameterMode.IN, type = Integer.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 			}
+	),
+	@NamedStoredProcedureQuery(name = "VISITAS_MED_BY_EMP_SUP_CONF",
+    procedureName = "VISITAS_MED_BY_EMP_SUP_CONF",
+	resultClasses = VisitaMedicaEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_supervisor_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		}
 	)
 })
 @Table(name="VISITAS_MEDICAS")
@@ -57,7 +66,7 @@ public class VisitaMedicaEntity {
 	UserEntity supervisor;
 	
 	@Column(name="CONFIRMACION_MEDICO")
-	Boolean confirmacionMedico;
+	Integer confirmacionMedico;
 	
 	@ManyToOne
     @JoinColumn(name = "EMPRESA_FK")

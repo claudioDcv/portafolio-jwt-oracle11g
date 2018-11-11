@@ -16,4 +16,6 @@ public interface TrabajadorService {
 	TrabajadorEntity findByEmail(String email);
 
 	Long crearTrabajadorSP(TrabajadorRequestDto trabajadorRequestDto);
+	
+	Long asignarRiesgosConTrabajadorId(List<Long> riesgosIds, Long trabajadorId);
 }

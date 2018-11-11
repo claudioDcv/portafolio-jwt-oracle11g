@@ -20,7 +20,7 @@ import lombok.Setter;
 	@NamedStoredProcedureQuery(
 			name = "asistencias_get_all_by_cap_id",
 			procedureName = "asistencias_get_all_by_cap_id",
-			resultClasses= { AsistenciaUsuarioEntity.class},
+			resultClasses= { AsistenciaTrabajadorEntity.class},
 			parameters = {
 					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
@@ -32,7 +32,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AsistenciaUsuarioEntity {
+public class AsistenciaTrabajadorEntity {
 	
 	@Id
 	@Column(name="asistencia_id")

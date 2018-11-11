@@ -18,5 +18,8 @@ public interface InformeService {
 	List<InformeTrabajadorDto> getAllInformeTrabajadorByEstado(Long id, Long empresa, Long estado);
 	List<InformeInstalacionDto> getAllInformeInstalacionyEstado(Long id, Long empresa, Long estado);
 	Boolean solicitarRevisionInformeDetalle(Long informeDetalleId, Long tecnicoId);
-
+	
+	List<InformeTrabajadorDto> getAllInformeTrabajadorBySupervisorId(Long supervisorId, Long idEmpresa);
+	List<InformeInstalacionDto> getAllInformeInstalacionyBySupervisorId(Long supervisorId, Long idEmpresa);
+	
 }

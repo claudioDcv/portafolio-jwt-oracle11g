@@ -97,6 +97,26 @@ import lombok.Setter;
 					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "O_RESULT", type = Integer.class)
 			}
 	),
+	@NamedStoredProcedureQuery(
+			name = "informes_instal_by_super",
+			procedureName = "informes_instal_by_super",
+			resultClasses= { InformeInstalacionDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_supervisor_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "informes_trab_by_super",
+			procedureName = "informes_trab_by_super",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_supervisor_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	)
 })
 @Table(name="INFORMES_DETALLES")
 @Entity

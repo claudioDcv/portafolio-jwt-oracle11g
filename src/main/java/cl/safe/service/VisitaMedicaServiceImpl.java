@@ -44,6 +44,14 @@ public class VisitaMedicaServiceImpl implements VisitaMedicaService{
 		}
 		return null;
 	}
+
+	@Override
+	public List<VisitaMedicaEntity> findAllByEmpresaSupervisorSP(Long empresaId, Long superVisorId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("VISITAS_MED_BY_EMP_SUP_CONF");
+		query.setParameter("p_empresa_fk", empresaId);
+		query.setParameter("p_supervisor_fk", superVisorId);
+		return query.getResultList();
+	}
 	
 	
 }

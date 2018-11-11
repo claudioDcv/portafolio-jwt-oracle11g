@@ -1,6 +1,7 @@
 package cl.safe.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +35,16 @@ import lombok.Setter;
 		parameters = {
 				@StoredProcedureParameter(name="p_id", mode = ParameterMode.IN, type = Long.class),
 				@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+		}
+	),
+	@NamedStoredProcedureQuery(name = "instalaciones_insert",
+    procedureName = "instalaciones_insert",
+	resultClasses = InstalacionEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_nombre", mode = ParameterMode.IN, type = String.class),
+			@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_codigo", mode = ParameterMode.IN, type = String.class),
+			@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_ID", type = Long.class)
 		}
 	)
 })

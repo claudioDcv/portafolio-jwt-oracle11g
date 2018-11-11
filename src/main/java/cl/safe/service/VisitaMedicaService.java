@@ -10,4 +10,5 @@ import cl.safe.entity.VisitaMedicaEntity;
 public interface VisitaMedicaService {
 	List<VisitaMedicaEntity> findAll();
 	public List<VisitaMedicaEntity> findAllByEmpresaMedicoConfirmacionSP(Long empresaId, Long medicoId, Integer confirmacion);
+	public List<VisitaMedicaEntity> findAllByEmpresaSupervisorSP(Long empresaId, Long superVisorId);
 }

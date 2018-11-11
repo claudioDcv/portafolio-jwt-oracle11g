@@ -75,6 +75,7 @@ public class InformeController {
 		return Utils.responseUnauthorized();
 	}
 	
+	// informe_instalacion_by_id por id de instalacion
 	@GetMapping("/instalacion/{id}")
 	public ResponseEntity<ResponseDto<InformeInstalacionDto>> getInformeInstalacionById(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
@@ -94,6 +95,7 @@ public class InformeController {
 		return Utils.responseUnauthorized();
 	}
 	
+	// por id de informe trabajador
 	@GetMapping("/trabajador/{id}")
 	public ResponseEntity<ResponseDto<InformeTrabajadorDto>> getInformeTrabajadorById(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
@@ -113,7 +115,7 @@ public class InformeController {
 		return Utils.responseUnauthorized();
 	}
 	
-	
+	// observaciones por id de informe-detalle
 	@GetMapping("/observaciones/informe-detalle/{id}")
 	public ResponseEntity<ResponseDto<List<ObservacionEntity>>> getObservacionesByInformeDetalleId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
@@ -185,7 +187,9 @@ public class InformeController {
 	}
 	
 	@GetMapping("/solicitar-revision-informe-detalle-id/{informeDetalleId}")
-	public ResponseEntity<ResponseDto<Boolean>> getAllInformesInstalacionByEstado(@RequestAttribute("claims") final Claims claims, @PathVariable(name="informeDetalleId") Long informeDetalleId) {
+	public ResponseEntity<ResponseDto<Boolean>> getAllInformesInstalacionByEstado(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="informeDetalleId") Long informeDetalleId) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		
 		if (Utils.hasProfile(user, Const.TECNICO)) {
@@ -198,4 +202,42 @@ public class InformeController {
 			
 		return Utils.responseUnauthorized();
 	}
+	
+	/* ************************************************/
+	@GetMapping("/trabajador/by-supervisor/{idEmpresa}")
+	public ResponseEntity<ResponseDto<List<InformeTrabajadorDto>>> getAllInformeTrabajadorBySupervisorId(
+				@RequestAttribute("claims") final Claims claims,
+				@PathVariable(name="idEmpresa") Long idEmpresa) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user, Const.SUPERVISOR)) {
+			ResponseDto<List<InformeTrabajadorDto>> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.getAllInformeTrabajadorBySupervisorId(user.getId(), idEmpresa));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/instalacion/by-supervisor/{idEmpresa}")
+	public ResponseEntity<ResponseDto<List<InformeInstalacionDto>>> getAllInformeInstalacionyBySupervisorId(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="idEmpresa") Long idEmpresa) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user, Const.SUPERVISOR)) {
+			ResponseDto<List<InformeInstalacionDto>> rdto = new ResponseDto<>();
+			rdto.setObj(informeService.getAllInformeInstalacionyBySupervisorId(user.getId(), idEmpresa));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	// asignar prevencionista a informe detalle
+	
 }
