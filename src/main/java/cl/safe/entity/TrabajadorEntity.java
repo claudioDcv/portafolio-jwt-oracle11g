@@ -62,6 +62,14 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="p_trabajador_fk", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(name="o_id", mode = ParameterMode.OUT, type = Long.class)
 			}
+	),
+	@NamedStoredProcedureQuery(name = "trabajadores_riesgo_all",
+    procedureName = "trabajadores_riesgo_all",
+	resultClasses = TrabajadorEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		}
 	)
 })
 @Getter

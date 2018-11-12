@@ -18,4 +18,6 @@ public interface TrabajadorService {
 	Long crearTrabajadorSP(TrabajadorRequestDto trabajadorRequestDto);
 	
 	Long asignarRiesgosConTrabajadorId(List<Long> riesgosIds, Long trabajadorId);
+	
+	List<TrabajadorEntity> findAllTrabajadoresRiesgoByEmpresaId(Long empresaId);
 }

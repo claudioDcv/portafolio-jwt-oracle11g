@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import cl.safe.dto.ConsultaMedicaRequestDto;
 import cl.safe.dto.VisitaMedicaRequestDto;
+import cl.safe.entity.ConsultaMedicaEntity;
 import cl.safe.entity.VisitaMedicaEntity;
 import cl.safe.repository.VisitaMedicaRepository;
 
@@ -165,5 +166,21 @@ public class VisitaMedicaServiceImpl implements VisitaMedicaService{
 		query.setParameter("p_empresa_fk", empresaId);
 		query.setParameter("p_visita_id", visitaMedicaId);
 		return (VisitaMedicaEntity) query.getSingleResult();
+	}
+
+	@Override
+	public List<ConsultaMedicaEntity> getAllConsultasMedicasByVisitaMedica(Long visitaMedicaId) {
+		/*
+		 * procedureName = "CONSULTA_BY_VISITA_MED_ID",
+			resultClasses = ConsultaMedicaEntity.class,
+			parameters = {
+					@StoredProcedureParameter(name="p_visita_medica_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+				}
+
+		 */
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("CONSULTA_BY_VISITA_MED_ID");
+		query.setParameter("p_visita_medica_id", visitaMedicaId);
+		return query.getResultList();
 	}	
 }

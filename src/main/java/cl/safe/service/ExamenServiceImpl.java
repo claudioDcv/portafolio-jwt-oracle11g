@@ -3,7 +3,9 @@ package cl.safe.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +37,12 @@ public class ExamenServiceImpl implements ExamenService {
 	@Override
 	public List<ExamenEntity> findAll() {
 		return (List<ExamenEntity>) examenrepository.findAll();
+	}
+
+	@Override
+	public List<ExamenEntity> getAllExamenesByConsultaId(Long consultaId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("EXAMENES_BY_CONSULTA_MED");
+		query.setParameter("p_consulta_medica_id", consultaId);
+		return query.getResultList();
 	}
 }

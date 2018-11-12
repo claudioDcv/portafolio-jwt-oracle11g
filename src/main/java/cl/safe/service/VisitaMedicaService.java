@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import cl.safe.dto.ConsultaMedicaRequestDto;
 import cl.safe.dto.VisitaMedicaRequestDto;
+import cl.safe.entity.ConsultaMedicaEntity;
 import cl.safe.entity.VisitaMedicaEntity;
 
 @Service
@@ -22,4 +23,5 @@ public interface VisitaMedicaService {
 	Long aceptarVisitaMedica(Long visitaMedicaId);
 	Long rechazarVisitaMedica(Long visitaMedicaId);
 	VisitaMedicaEntity getVisitaMedicaById(Long empresaId, Long visitaMedicaId);
+	List<ConsultaMedicaEntity> getAllConsultasMedicasByVisitaMedica(Long visitaMedicaId);
 }

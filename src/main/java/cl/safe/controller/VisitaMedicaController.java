@@ -23,6 +23,7 @@ import cl.safe.dto.ExamenConsultaMedicaRequestDto;
 import cl.safe.dto.InstalacionRequestDto;
 import cl.safe.dto.ResponseDto;
 import cl.safe.dto.VisitaMedicaRequestDto;
+import cl.safe.entity.ConsultaMedicaEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.entity.VisitaMedicaEntity;
 import cl.safe.service.UserServiceSP;
@@ -206,6 +207,23 @@ public class VisitaMedicaController {
 					examenConsultaMedicaRequestDto.getConsultaMedicaId(),
 					examenConsultaMedicaRequestDto.getExamenId()
 			));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+		return Utils.responseUnauthorized();
+	}
+	
+	// getAllConsultasMedicasByVisitaMedica
+	@GetMapping("/consulta-medica/por-visita-medica/{visitaMedicaId}")
+	public ResponseEntity<ResponseDto<List<ConsultaMedicaEntity>>> getAllConsultasMedicasByVisitaMedica(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="visitaMedicaId") Long visitaMedicaId) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user, Const.MEDICO)) {
+			ResponseDto<List<ConsultaMedicaEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(visitaMedicaService.getAllConsultasMedicasByVisitaMedica(visitaMedicaId));
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);

@@ -28,6 +28,15 @@ import lombok.ToString;
 					@StoredProcedureParameter(name="p_codigo", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
 			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "EXAMENES_BY_CONSULTA_MED",
+			procedureName = "EXAMENES_BY_CONSULTA_MED",
+			resultClasses= { ExamenEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_consulta_medica_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
 	)
 })
 @Entity

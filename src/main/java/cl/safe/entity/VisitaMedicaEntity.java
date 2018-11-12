@@ -13,6 +13,7 @@ import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
+import cl.safe.dto.ConsultaMedicaRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -115,8 +116,16 @@ import lombok.Setter;
 			@StoredProcedureParameter(name="p_visita_id", mode = ParameterMode.IN, type = Long.class),
 			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 		}
+	),
+	@NamedStoredProcedureQuery(name = "CONSULTA_BY_VISITA_MED_ID",
+    procedureName = "CONSULTA_BY_VISITA_MED_ID",
+	resultClasses = ConsultaMedicaEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_visita_medica_id", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		}
 	)
-})
+})	
 @Table(name="VISITAS_MEDICAS")
 @Entity
 @Getter

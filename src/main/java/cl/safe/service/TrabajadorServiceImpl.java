@@ -3,7 +3,10 @@ package cl.safe.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,5 +77,22 @@ public class TrabajadorServiceImpl implements TrabajadorService{
 		}
 
 		return (Long) query.getOutputParameterValue("O_ID");
+	}
+
+	@Override
+	public List<TrabajadorEntity> findAllTrabajadoresRiesgoByEmpresaId(Long empresaId) {
+		/*
+		 * @NamedStoredProcedureQuery(name = "trabajadores_riesgo_all",
+		    procedureName = "trabajadores_riesgo_all",
+			resultClasses = TrabajadorEntity.class,
+			parameters = {
+					@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+				}
+			)
+		 */
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("trabajadores_riesgo_all");
+		query.setParameter("p_empresa_fk", empresaId);
+		return query.getResultList();
 	}
 }

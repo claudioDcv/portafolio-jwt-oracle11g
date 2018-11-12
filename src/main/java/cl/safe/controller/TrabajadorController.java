@@ -116,5 +116,23 @@ public class TrabajadorController {
 		return Utils.responseUnauthorized();
 	}
 	
+	@GetMapping("/en-empresa-con-riesgo/{empresaId}")
+	public ResponseEntity<ResponseDto<List<TrabajadorEntity>>> findAllTrabajadoresRiesgoByEmpresaId(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="empresaId") Long empresaId) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user,
+				Const.MEDICO,
+				Const.SUPERVISOR)) {
+			ResponseDto<List<TrabajadorEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(trabajadorService.findAllTrabajadoresRiesgoByEmpresaId(empresaId));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
 	
 }

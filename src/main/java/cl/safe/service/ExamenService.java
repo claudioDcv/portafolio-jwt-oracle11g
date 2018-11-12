@@ -12,4 +12,5 @@ import cl.safe.entity.ExamenEntity;
 public interface ExamenService {
 	Long insertExamen(ExamenRequestDto examenRequestDto);
 	List<ExamenEntity> findAll();
+	List<ExamenEntity> getAllExamenesByConsultaId(Long consultaId);
 }
