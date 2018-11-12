@@ -3,7 +3,10 @@ package cl.safe.service;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,6 +152,18 @@ public class VisitaMedicaServiceImpl implements VisitaMedicaService{
 		query.execute();
 		return (Long) query.getOutputParameterValue("o_id");
 	}
-	
-	
+
+	@Override
+	public VisitaMedicaEntity getVisitaMedicaById(Long empresaId, Long visitaMedicaId) {
+		/*
+	    	procedureName = "VISITA_MEDICA_BY_ID_EMPRESA_FK",
+			@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_visita_id", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		 */
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("VISITA_MEDICA_BY_ID_EMPRESA_FK");
+		query.setParameter("p_empresa_fk", empresaId);
+		query.setParameter("p_visita_id", visitaMedicaId);
+		return (VisitaMedicaEntity) query.getSingleResult();
+	}	
 }

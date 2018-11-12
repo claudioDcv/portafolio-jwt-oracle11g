@@ -21,4 +21,5 @@ public interface VisitaMedicaService {
 	Long asignarExamenConsultaMedica(Long consultaMedicaid, Long examenId);
 	Long aceptarVisitaMedica(Long visitaMedicaId);
 	Long rechazarVisitaMedica(Long visitaMedicaId);
+	VisitaMedicaEntity getVisitaMedicaById(Long empresaId, Long visitaMedicaId);
 }

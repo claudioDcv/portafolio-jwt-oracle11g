@@ -326,7 +326,8 @@ public class InformeController {
 	}
 	
 	@PostMapping("/observaciones/recomendaciones")
-	public ResponseEntity<ResponseDto<Long>> agregarRecomendacionParaObservacionPorPreve(@RequestAttribute("claims") final Claims claims,
+	public ResponseEntity<ResponseDto<Long>> agregarRecomendacionParaObservacionPorPreve(
+			@RequestAttribute("claims") final Claims claims,
 			@RequestBody @Valid final ObservacionRequestDto observacionRequestDto) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 

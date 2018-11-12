@@ -106,6 +106,15 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="p_visita_medica_id", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
 			}
+	),
+	@NamedStoredProcedureQuery(name = "VISITA_MEDICA_BY_ID_EMPRESA_FK",
+    procedureName = "VISITA_MEDICA_BY_ID_EMPRESA_FK",
+	resultClasses = VisitaMedicaEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_visita_id", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		}
 	)
 })
 @Table(name="VISITAS_MEDICAS")

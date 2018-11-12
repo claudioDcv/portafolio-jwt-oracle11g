@@ -72,6 +72,23 @@ public class VisitaMedicaController {
 		}
 		return Utils.responseUnauthorized();
 	}
+	
+	@GetMapping("/{empresaId}/{visitaMedicaId}")
+	public ResponseEntity<ResponseDto<VisitaMedicaEntity>> getVisitaMedicaById(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="empresaId") Long empresaId,
+			@PathVariable(name="visitaMedicaId") Long visitaMedicaId) {
+		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(u, Const.MEDICO)) {
+			ResponseDto<VisitaMedicaEntity> rdto = new ResponseDto<>();
+			rdto.setObj(visitaMedicaService.getVisitaMedicaById(empresaId, visitaMedicaId));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+		return Utils.responseUnauthorized();
+	}
 
 	/*
 	 * List<VisitaMedicaEntity> findAll();
@@ -87,6 +104,7 @@ public class VisitaMedicaController {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		
 		if (Utils.hasProfile(user, Const.SUPERVISOR)) {
+			visitaMedicaRequestDto.setSupervisorId(user.getId());
 			ResponseDto<Long> rdto = new ResponseDto<>();
 			rdto.setObj(visitaMedicaService.crearVisitaMedica(visitaMedicaRequestDto));
 			rdto.setMessage("OK");
