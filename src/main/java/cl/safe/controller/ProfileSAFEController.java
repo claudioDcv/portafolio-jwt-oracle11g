@@ -22,7 +22,8 @@ public class ProfileSAFEController {
 	
 	@CrossOrigin
 	@GetMapping(value="/por-id-usuario/{id}")
-	public ResponseDto<List<Profile>> getProfileByUserId(@PathVariable(name="id") Long id) {
+	public ResponseDto<List<Profile>> getProfileByUserId(
+			@PathVariable(name="id") Long id) {
 		ResponseDto<List<Profile>> responseDto = new ResponseDto<>();
 		responseDto.setObj(profileService.getProfileByUserId(id));
 		return responseDto;

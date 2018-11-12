@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.safe.config.Const;
 import cl.safe.config.Utils;
+import cl.safe.dto.ProfilesRequestDto;
 import cl.safe.dto.RegisterRequest;
 import cl.safe.dto.ResponseDto;
 import cl.safe.dto.SearchDto;
+import cl.safe.dto.TrabajadorRequestDto;
+import cl.safe.dto.TrabajadorRiesgosRequestDto;
 import cl.safe.entity.EmpresaEntity;
 import cl.safe.entity.TrabajadorEntity;
 import cl.safe.entity.UserEntity;
@@ -54,7 +57,9 @@ public class TrabajadorController {
 	}
 	
 	@GetMapping("/empresa/{id}")
-	public ResponseEntity<ResponseDto<List<TrabajadorEntity>>> getByEmpresaId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+	public ResponseEntity<ResponseDto<List<TrabajadorEntity>>> getByEmpresaId(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="id") Long id) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		
 		if (Utils.hasProfile(user,
@@ -73,4 +78,61 @@ public class TrabajadorController {
 			
 		return Utils.responseUnauthorized();
 	}
+	
+	@PostMapping("")
+	public ResponseEntity<ResponseDto<Long>> crearTrabajador(
+			@RequestAttribute("claims") final Claims claims,
+			@RequestBody @Valid final TrabajadorRequestDto trabajadorRequestDto) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(user,
+				Const.ADMIN_SAFE)) {
+			ResponseDto<Long> rdto = new ResponseDto<>();
+			rdto.setObj(trabajadorService.crearTrabajadorSP(trabajadorRequestDto));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@PostMapping("/asignar-riesgos")
+	public ResponseEntity<ResponseDto<Long>> asignarPerfiles(
+			@RequestAttribute("claims") final Claims claims,
+			@RequestBody @Valid final TrabajadorRiesgosRequestDto trabajadorRiesgosRequestDto) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user, Const.ADMIN_SAFE)) {
+			ResponseDto<Long> rdto = new ResponseDto<>();
+			rdto.setObj(trabajadorService.asignarRiesgosConTrabajadorId(
+					trabajadorRiesgosRequestDto.getRiesgos(),
+					trabajadorRiesgosRequestDto.getTrabajadorId()));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/en-empresa-con-riesgo/{empresaId}")
+	public ResponseEntity<ResponseDto<List<TrabajadorEntity>>> findAllTrabajadoresRiesgoByEmpresaId(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="empresaId") Long empresaId) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (Utils.hasProfile(user,
+				Const.MEDICO,
+				Const.SUPERVISOR)) {
+			ResponseDto<List<TrabajadorEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(trabajadorService.findAllTrabajadoresRiesgoByEmpresaId(empresaId));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
 }

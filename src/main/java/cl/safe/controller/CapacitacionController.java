@@ -17,14 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.safe.config.Const;
 import cl.safe.config.Utils;
-import cl.safe.dto.CapacitacioneRequestDto;
+import cl.safe.dto.CapacitacionRequestDto;
+import cl.safe.dto.CapacitacioneByEmpresaIdRequestDto;
+import cl.safe.dto.InformeInstalacionDtoRequest;
 import cl.safe.dto.ResponseDto;
 import cl.safe.dto.VisitaMedicaRequestDto;
-import cl.safe.entity.AsistenciaUsuarioEntity;
+import cl.safe.entity.AsistenciaTrabajadorEntity;
 import cl.safe.entity.CapacitacionEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.entity.VisitaMedicaEntity;
 import cl.safe.service.CapacitacionService;
+import cl.safe.service.UserService;
 import cl.safe.service.UserServiceSP;
 import io.jsonwebtoken.Claims;
 
@@ -38,13 +41,29 @@ public class CapacitacionController {
 	@Autowired
 	private UserServiceSP userServiceSP;
 	
-	@PostMapping
-	public ResponseEntity<ResponseDto<List<CapacitacionEntity>>> misVisitasMedicasMedico(@RequestAttribute("claims") final Claims claims, @RequestBody @Valid final CapacitacioneRequestDto capacitacioneRequestDto) {
+	@Autowired
+	private UserService userService;
+	
+	@GetMapping("/examinador/{empresaId}")
+	public ResponseEntity<ResponseDto<List<CapacitacionEntity>>> findAllByEmpresaExaminador(@RequestAttribute("claims") final Claims claims, @PathVariable(name="empresaId") Long empresaId) {
 		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
 
-		if (Utils.hasProfile(u, Const.ADMIN_SAFE, Const.EXAMINADOR, Const.SUPERVISOR)) {
+		if (Utils.hasProfile(u, Const.EXAMINADOR)) {
 			ResponseDto<List<CapacitacionEntity>> rdto = new ResponseDto<>();
-			rdto.setObj(capacitacionService.findAllByEmpresaExaminadorSP(capacitacioneRequestDto.getEmpresaId(), u.getId()));
+			rdto.setObj(capacitacionService.findAllByEmpresaExaminadorSP(empresaId, u.getId()));
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/supervisor/{empresaId}")
+	public ResponseEntity<ResponseDto<List<CapacitacionEntity>>> findAllByEmpresaSupervisorExaminador(@RequestAttribute("claims") final Claims claims, @PathVariable(name="empresaId") Long empresaId) {
+		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(u, Const.SUPERVISOR)) {
+			ResponseDto<List<CapacitacionEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(capacitacionService.findAllByEmpresaSupervisorSP(empresaId, u.getId()));
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}
 			
@@ -66,12 +85,53 @@ public class CapacitacionController {
 	}
 	
 	@GetMapping("/asistencias/{id}")
-	public ResponseEntity<ResponseDto<List<AsistenciaUsuarioEntity>>> asistenciasByCapacitacionId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
+	public ResponseEntity<ResponseDto<List<AsistenciaTrabajadorEntity>>> asistenciasByCapacitacionId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
 		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
 
 		if (Utils.hasProfile(u, Const.ADMIN_SAFE, Const.EXAMINADOR, Const.SUPERVISOR)) {
-			ResponseDto<List<AsistenciaUsuarioEntity>> rdto = new ResponseDto<>();
+			ResponseDto<List<AsistenciaTrabajadorEntity>> rdto = new ResponseDto<>();
 			rdto.setObj(capacitacionService.findAllAsistentesByCapacitacionId(id));
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@PostMapping("")
+	public ResponseEntity<ResponseDto<Long>> crearCapacitacion(
+			@RequestAttribute("claims") final Claims claims,
+			@RequestBody @Valid final CapacitacionRequestDto capacitacionEntity) {
+		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
+		
+		System.out.println(capacitacionEntity);
+		
+		if (Utils.hasProfile(u, Const.SUPERVISOR)) {
+			
+			UserEntity examinador = userService.findOne(capacitacionEntity.getExaminador());
+			
+			if (!Utils.hasProfile(examinador, Const.EXAMINADOR)) {
+				return Utils.responseUnauthorized("El usuario examinador no posee el perfil de examinador");
+			}
+			
+			capacitacionEntity.setSupervisor(u.getId());
+			
+			ResponseDto<Long> rdto = new ResponseDto<>();
+			rdto.setObj(capacitacionService.crearCapacitacion(capacitacionEntity));
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+			
+		return Utils.responseUnauthorized();
+	}
+	
+	@GetMapping("/cerrar-capacitacion/{capacitacionId}")
+	public ResponseEntity<ResponseDto<Long>> cerrarCapacitacion(
+			@RequestAttribute("claims") final Claims claims,
+			@PathVariable(name="capacitacionId") Long capacitacionId) {
+		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
+
+		if (Utils.hasProfile(u, Const.EXAMINADOR)) {
+			ResponseDto<Long> rdto = new ResponseDto<>();
+			rdto.setObj(capacitacionService.cerrarCapacitacion(capacitacionId));
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}
 			

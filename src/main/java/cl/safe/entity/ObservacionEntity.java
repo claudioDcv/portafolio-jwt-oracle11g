@@ -36,6 +36,16 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="p_informe_detalle_fk", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
 			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "observ_update_by_preve",
+			procedureName = "observ_update_by_preve",
+			resultClasses= { InformeDetalleEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_observacion_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_recomendacion", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
 	)
 })
 @Entity

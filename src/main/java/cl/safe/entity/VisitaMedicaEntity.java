@@ -13,17 +13,12 @@ import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
+import cl.safe.dto.ConsultaMedicaRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/*
- * P_EMPRESA_FK NUMBER;
-  P_MEDICO_FK NUMBER;
-  P_CONFIRMACION_MEDICO NUMBER;
-  O_CURSOR SYS_REFCURSOR;
- */
 @NamedStoredProcedureQueries({
 	@NamedStoredProcedureQuery(name = "VISITAS_MED_BY_EMP_MED_CONF",
             procedureName = "VISITAS_MED_BY_EMP_MED_CONF",
@@ -34,8 +29,103 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="P_CONFIRMACION_MEDICO", mode = ParameterMode.IN, type = Integer.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 			}
+	),
+	@NamedStoredProcedureQuery(name = "VISITAS_MED_BY_EMP_SUP_CONF",
+    procedureName = "VISITAS_MED_BY_EMP_SUP_CONF",
+	resultClasses = VisitaMedicaEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_supervisor_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		}
+	),
+	//////// SP FINALES /////
+	@NamedStoredProcedureQuery(
+			name = "visita_medica_insert",
+			procedureName = "visita_medica_insert",
+			resultClasses= { VisitaMedicaEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_medico_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_supervisor_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_fecha_realizacion", mode = ParameterMode.IN, type = Date.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "consulta_medica_insert",
+			procedureName = "consulta_medica_insert",
+			resultClasses= { VisitaMedicaEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_trabajador_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_visita_medica_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "consulta_medica_cerrar",
+			procedureName = "consulta_medica_cerrar",
+			resultClasses= { VisitaMedicaEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_consulta_medica_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "examen_asignar_consulta_medica",
+			procedureName = "examen_asignar_consulta_medica",
+			resultClasses= { VisitaMedicaEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_consulta_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_examen_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "visita_medica_cerrar",
+			procedureName = "visita_medica_cerrar",
+			resultClasses= { VisitaMedicaEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_visita_medica_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "visita_medica_aceptar",
+			procedureName = "visita_medica_aceptar",
+			resultClasses= { VisitaMedicaEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_visita_medica_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "visita_medica_rechazar",
+			procedureName = "visita_medica_rechazar",
+			resultClasses= { VisitaMedicaEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_visita_medica_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(name = "VISITA_MEDICA_BY_ID_EMPRESA_FK",
+    procedureName = "VISITA_MEDICA_BY_ID_EMPRESA_FK",
+	resultClasses = VisitaMedicaEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_visita_id", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		}
+	),
+	@NamedStoredProcedureQuery(name = "CONSULTA_BY_VISITA_MED_ID",
+    procedureName = "CONSULTA_BY_VISITA_MED_ID",
+	resultClasses = ConsultaMedicaEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_visita_medica_id", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		}
 	)
-})
+})	
 @Table(name="VISITAS_MEDICAS")
 @Entity
 @Getter
@@ -57,7 +147,7 @@ public class VisitaMedicaEntity {
 	UserEntity supervisor;
 	
 	@Column(name="CONFIRMACION_MEDICO")
-	Boolean confirmacionMedico;
+	Integer confirmacionMedico;
 	
 	@ManyToOne
     @JoinColumn(name = "EMPRESA_FK")

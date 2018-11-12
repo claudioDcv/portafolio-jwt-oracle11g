@@ -11,6 +11,7 @@ import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureParameter;
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -36,6 +37,37 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
 			}
+	),
+	@NamedStoredProcedureQuery(name = "CAPACITACION_BY_EMP_SUP",
+	    procedureName = "CAPACITACION_BY_EMP_SUP",
+		resultClasses = CapacitacionEntity.class,
+		parameters = {
+				@StoredProcedureParameter(name="P_EMPRESA_FK", mode = ParameterMode.IN, type = Long.class),
+				@StoredProcedureParameter(name="p_supervisor_fk", mode = ParameterMode.IN, type = Long.class),
+				@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+		}
+	),
+	@NamedStoredProcedureQuery(name = "CAPACITACIONES_INSERT",
+    procedureName = "CAPACITACIONES_INSERT",
+	resultClasses = CapacitacionEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_examinador_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_supervisor_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_nombre", mode = ParameterMode.IN, type = String.class),
+			@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="p_fecha_realizacion", mode = ParameterMode.IN, type = Date.class),
+			@StoredProcedureParameter(name="p_descripcion", mode = ParameterMode.IN, type = String.class),
+			@StoredProcedureParameter(name="p_asistentes_minimos", mode = ParameterMode.IN, type = Integer.class),
+			@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_ID", type = Long.class)
+		}
+	),
+	@NamedStoredProcedureQuery(name = "capacitacion_cerrar",
+    procedureName = "capacitacion_cerrar",
+	resultClasses = CapacitacionEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_capacitacion_id", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(mode = ParameterMode.OUT, name = "p_id", type = Long.class)
+		}
 	)
 })
 @Table(name="CAPACITACIONES")
@@ -73,4 +105,7 @@ public class CapacitacionEntity {
 	
 	@Column(name="FECHA_REALIZACION")
 	Date fechaRealizacion;
+	
+	@Column(name="ESTADO")
+	Integer estado;
 }

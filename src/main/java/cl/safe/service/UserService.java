@@ -49,4 +49,9 @@ public class UserService {
     final UserEntity savedUser = userRepository.save(user);
     return UserBuilder.buildUserJson(savedUser);
   }
+  
+  public UserEntity findOne(Long id) {
+	  return userRepository.findOne(id);
+  }
+  
 }

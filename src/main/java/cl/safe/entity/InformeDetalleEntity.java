@@ -14,6 +14,7 @@ import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
 import cl.safe.dto.InformeInstalacionDto;
+import cl.safe.dto.InformeTrabajadorDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,117 @@ import lombok.Setter;
 			parameters = {
 					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "informe_trabajador_by_id",
+			procedureName = "informe_trabajador_by_id",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "info_trabajador_by_estado",
+			procedureName = "info_trabajador_by_estado",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ID_EMPRESA", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ESTADO", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "info_instalacion_by_estado",
+			procedureName = "info_instalacion_by_estado",
+			resultClasses= { InformeInstalacionDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ID_EMPRESA", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ESTADO", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "solicitud_revision_ifo_deta",
+			procedureName = "solicitud_revision_ifo_deta",
+			resultClasses= { InformeDetalleEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_TECNICO_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ID", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "O_RESULT", type = Integer.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "informes_instal_by_super",
+			procedureName = "informes_instal_by_super",
+			resultClasses= { InformeInstalacionDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_supervisor_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "informes_trab_by_super",
+			procedureName = "informes_trab_by_super",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_supervisor_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "informe_det_asig_preve",
+			procedureName = "informe_det_asig_preve",
+			resultClasses= { InformeDetalleEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_prevencionista_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_detalle_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "informe_detalle_rechaz",
+			procedureName = "informe_detalle_rechaz",
+			resultClasses= { InformeDetalleEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_detalle_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "informe_detalle_aprob",
+			procedureName = "informe_detalle_aprob",
+			resultClasses= { InformeDetalleEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_detalle_id", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "info_instalacion_by_preve",
+			procedureName = "info_instalacion_by_preve",
+			resultClasses= { InformeInstalacionDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_id_preve", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ID_EMPRESA", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ESTADO", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "info_trabajador_by_preve",
+			procedureName = "info_trabajador_by_preve",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_id_preve", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ID_EMPRESA", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="P_ESTADO", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 			}
 	)
 })

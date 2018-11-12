@@ -87,6 +87,7 @@ import lombok.ToString;
 			parameters = {
 					@StoredProcedureParameter(name="p_EMAIL", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_DISPLAY_NAME", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_SURNAME", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_USER_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(name="o_USER_ID", mode = ParameterMode.OUT, type = Long.class)
 			}
@@ -127,4 +128,5 @@ public class UserEntity implements Serializable {
 		)
 	)
 	@Getter @Setter List<Profile> profiles;
+	
 }

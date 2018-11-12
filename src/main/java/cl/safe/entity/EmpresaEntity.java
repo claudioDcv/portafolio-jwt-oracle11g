@@ -29,6 +29,18 @@ import lombok.Setter;
 			parameters = {
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
 			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "EMPRESAS_INSERT",
+			procedureName = "EMPRESAS_INSERT",
+			resultClasses= { UserEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_nombre", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_direccion", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_telefono", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_email", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="o_ID", mode = ParameterMode.OUT, type = Long.class)
+			}
 	)
 })
 @Entity

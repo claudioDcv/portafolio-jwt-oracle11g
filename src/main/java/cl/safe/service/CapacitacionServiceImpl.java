@@ -1,9 +1,13 @@
 package cl.safe.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.StoredProcedureQuery;
 
 import org.owasp.html.HtmlPolicyBuilder;
@@ -11,7 +15,8 @@ import org.owasp.html.PolicyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cl.safe.entity.AsistenciaUsuarioEntity;
+import cl.safe.dto.CapacitacionRequestDto;
+import cl.safe.entity.AsistenciaTrabajadorEntity;
 import cl.safe.entity.CapacitacionEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.repository.EmpresaRepository;
@@ -63,10 +68,40 @@ public class CapacitacionServiceImpl implements CapacitacionService {
 	}
 
 	@Override
-	public List<AsistenciaUsuarioEntity> findAllAsistentesByCapacitacionId(Long capacitacionId) {
+	public List<AsistenciaTrabajadorEntity> findAllAsistentesByCapacitacionId(Long capacitacionId) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("asistencias_get_all_by_cap_id");
 		query.setParameter("P_ID", capacitacionId);
 		return query.getResultList();
+	}
+
+	@Override
+	public List<CapacitacionEntity> findAllByEmpresaSupervisorSP(Long empresaId, Long supervisorId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("CAPACITACION_BY_EMP_SUP");
+		query.setParameter("P_EMPRESA_FK", empresaId);
+		query.setParameter("p_supervisor_fk", supervisorId);
+		return query.getResultList();
+	}
+
+	@Override
+	public Long crearCapacitacion(CapacitacionRequestDto capacitacionEntity) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("CAPACITACIONES_INSERT");
+		query.setParameter("p_examinador_fk", capacitacionEntity.getExaminador());
+		query.setParameter("p_supervisor_fk", capacitacionEntity.getSupervisor());
+		query.setParameter("p_nombre", capacitacionEntity.getNombre());
+		query.setParameter("p_empresa_fk", capacitacionEntity.getEmpresa());
+		query.setParameter("p_fecha_realizacion", capacitacionEntity.getFechaRealizacion());
+		query.setParameter("p_descripcion", capacitacionEntity.getDescripcion());
+		query.setParameter("p_asistentes_minimos", capacitacionEntity.getAsistentesMinimos());		
+		query.execute();
+		return (Long) query.getOutputParameterValue("o_ID");
+	}
+
+	@Override
+	public Long cerrarCapacitacion(Long capacitacionId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("capacitacion_cerrar");
+		query.setParameter("p_capacitacion_id", capacitacionId);
+		query.execute();
+		return (Long) query.getOutputParameterValue("p_id");
 	}
 
 }
