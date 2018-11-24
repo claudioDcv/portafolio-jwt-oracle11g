@@ -1,8 +1,19 @@
 server:
-  port: 8000 
+  port: 4000 
 
 
 spring:
+  datasource:
+    url: jdbc:oracle:thin:@//127.0.0.1:49161/xe
+    username: safe_user
+    password: 1234qwer
+    driver-class-name: oracle.jdbc.OracleDriver
+    #hibernate config
+
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    show-sql: true
+
   application:
     name: jwt-server
   messages:
@@ -19,6 +30,12 @@ spring:
       max-file-size: 200MB
 # Max Request Size
       max-request-size: 215MB
+     
+  mvc:
+    contentnogotiation:
+      favor-parameter: true
+      media-types:
+        pdf: application/pdf
 
 ## File Storage Properties
 # All files uploaded through the REST API will be stored in this directory
@@ -38,19 +55,5 @@ logbook:
     level: DEBUG
     category: http.wire-log
 
----
-    
-spring:
-  datasource:
-    url: jdbc:oracle:thin:@//127.0.0.1:49161/xe
-    username: safe_user
-    password: 1234qwer
-    driver-class-name: oracle.jdbc.OracleDriver
 
-#hibernate config
-
-  jpa:
-    database-platform: org.hibernate.dialect.Oracle10gDialect
-    show-sql: true
-server:
-  port: 4000
+  

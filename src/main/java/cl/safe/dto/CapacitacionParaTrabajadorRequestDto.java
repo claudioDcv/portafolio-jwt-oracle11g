@@ -1,8 +1,8 @@
 package cl.safe.dto;
 
-import java.util.List;
+import java.util.Date;
 
-import org.springframework.http.HttpStatus;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,10 +13,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResponseDto<T> {
-	String message;
-	HttpStatus status;
-	T obj;
-	Integer code = 200;
+public class CapacitacionParaTrabajadorRequestDto {
 	
+	String run;
+	Long empresaId;
+	
+	Long asistenciaId;
 }

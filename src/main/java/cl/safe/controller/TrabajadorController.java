@@ -85,6 +85,10 @@ public class TrabajadorController {
 			@RequestBody @Valid final TrabajadorRequestDto trabajadorRequestDto) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 
+		if ( trabajadorService.getTrabajadorByRutAndEmpresaId(trabajadorRequestDto.getRun(), trabajadorRequestDto.getEmpresa()) > 0 ) {
+			return Utils.responseUnauthorized("Trabajador ya existe");
+		}
+		
 		if (Utils.hasProfile(user,
 				Const.ADMIN_SAFE)) {
 			ResponseDto<Long> rdto = new ResponseDto<>();
