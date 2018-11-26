@@ -1,6 +1,7 @@
 package cl.safe.service;
 
 import java.lang.annotation.Native;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -16,6 +17,7 @@ import cl.safe.dto.InformeInstalacionDto;
 import cl.safe.dto.InformeInstalacionDtoRequest;
 import cl.safe.dto.InformeTrabajadorDto;
 import cl.safe.dto.InformeTrabajadorRequestDto;
+import cl.safe.dto.PaginacionObjetoResponseDto;
 import cl.safe.dto.ObservacionRequestDto;
 import cl.safe.entity.EmpresaEntity;
 import cl.safe.entity.InformeDetalleEntity;
@@ -185,6 +187,53 @@ public class InformeServiceImpl implements InformeService {
 		query.execute();
 		return (Long) query.getOutputParameterValue("o_id");
 	}
+
+	@Override
+	public List<InformeInstalacionDto> getAllInformeInstalacionADMINEMPRESA(Long empresa) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_instalacion_admin_empresa");
+		query.setParameter("P_ID_EMPRESA", empresa);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<InformeTrabajadorDto> getAllInformeTrabajadorADMINEMPRESA(Long empresa) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_trabajador_admin_empresa");
+		query.setParameter("p_id_empresa", empresa);
+		return query.getResultList();
+	}
 	
+	@Override
+	public PaginacionObjetoResponseDto getAllInformeTrabajadorADMINEMPRESA_PAG(
+			Long empresa,
+			Long pageNumber,
+			Long pageSize,
+			Date fromDate,
+			Date toDate
+			) {
+		
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_trab_admin_empresa_dat");
+
+		System.out.println("empresa:" + empresa +
+				",pageNumber:" + pageNumber +
+				",pageSize:" + pageSize +
+				",from_date:" + fromDate +
+				",to_date:" + toDate);
+		query.setParameter("p_id_empresa", empresa);
+		query.setParameter("p_page_number", pageNumber);
+		query.setParameter("p_page_size", pageSize);
+		
+		query.setParameter("p_from_date", fromDate);
+		query.setParameter("p_to_date", toDate);
+		
+		
+		
+		
+		PaginacionObjetoResponseDto<InformeTrabajadorDto> l = new PaginacionObjetoResponseDto<>();
+		l.initialized((Long) query.getOutputParameterValue("o_count"), pageSize, pageNumber);
+		l.setList(query.getResultList());
+		
+		/* LOGICA PAGINACION */	
+		return l;
+	}
 	
 }

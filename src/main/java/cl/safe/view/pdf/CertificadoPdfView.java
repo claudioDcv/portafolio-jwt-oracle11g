@@ -27,8 +27,9 @@ public class CertificadoPdfView extends AbstractPdfView {
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 			CapacitacionParaTrabajadorEntity c =  (CapacitacionParaTrabajadorEntity) model.get("certificado");
-			String trabajador = c.getNombre() + " " + c.getApellidoPaterno() + " " + c.getApellidoMaterno();
-			
+			String trabajador = c.getNombre() + " "
+					+ c.getApellidoPaterno() + " "
+					+ c.getApellidoMaterno();
 			
 			Paragraph titulo = new Paragraph("CERTIFICADO DE CAPACITACIÓN SAFE S.A.");
 			titulo.setAlignment(Element.ALIGN_CENTER);

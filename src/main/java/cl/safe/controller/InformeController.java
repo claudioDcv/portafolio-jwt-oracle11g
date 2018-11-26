@@ -21,6 +21,8 @@ import cl.safe.dto.InformeInstalacionDto;
 import cl.safe.dto.InformeInstalacionDtoRequest;
 import cl.safe.dto.InformeTrabajadorDto;
 import cl.safe.dto.InformeTrabajadorRequestDto;
+import cl.safe.dto.PaginacionRequestDto;
+import cl.safe.dto.PaginacionObjetoResponseDto;
 import cl.safe.dto.LoginRequest;
 import cl.safe.dto.ObservacionRequestDto;
 import cl.safe.dto.ResponseDto;
@@ -343,5 +345,74 @@ public class InformeController {
 		return Utils.responseUnauthorized();
 	}
 	
+	// INFORMES PARA ADMIN DE EMPRESA /api/informes/instalacion-admin-empresa
+	// informe_instalacion_by_id por id de instalacion
+		@GetMapping("/instalacion-admin-empresa")
+		public ResponseEntity<ResponseDto<List<InformeInstalacionDto>>> getAllInformeInstalacionADMINEMPRESA(
+				@RequestAttribute("claims") final Claims claims) {
+			UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+			
+			if (user.getEmpresaFk() == null) {
+				return Utils.responseUnauthorized("No registra empresa asignada como Administrador");
+			}
+			
+			if (Utils.hasProfile(user, Const.ADMIN_EMPRESA)) {
+				ResponseDto<List<InformeInstalacionDto>> rdto = new ResponseDto<>();
+				rdto.setObj(informeService.getAllInformeInstalacionADMINEMPRESA(user.getEmpresaFk()));
+				rdto.setMessage("OK");
+				rdto.setStatus(HttpStatus.OK);
+				return new ResponseEntity<>(rdto, HttpStatus.OK);
+			}
 
+			return Utils.responseUnauthorized();
+		}
+
+		// por id de informe trabajador /api/informes/trabajador-admin-empresa
+		@GetMapping("/trabajador-admin-empresa")
+		public ResponseEntity<ResponseDto<List<InformeTrabajadorDto>>> getAllInformeTrabajadorADMINEMPRESA(
+				@RequestAttribute("claims") final Claims claims) {
+			UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+			
+			if (user.getEmpresaFk() == null) {
+				return Utils.responseUnauthorized("No registra empresa asignada como Administrador");
+			}
+			
+			if (Utils.hasProfile(user, Const.ADMIN_EMPRESA)) {
+				ResponseDto<List<InformeTrabajadorDto>> rdto = new ResponseDto<>();
+				rdto.setObj(informeService.getAllInformeTrabajadorADMINEMPRESA(user.getEmpresaFk()));
+				rdto.setMessage("OK");
+				rdto.setStatus(HttpStatus.OK);
+				return new ResponseEntity<>(rdto, HttpStatus.OK);
+			}
+
+			return Utils.responseUnauthorized();
+		}
+		
+		// por id de informe trabajador /api/informes/trabajador-admin-empresa
+				@PostMapping("/trabajador-admin-empresa")
+				public ResponseEntity<ResponseDto<PaginacionObjetoResponseDto>> getAllInformeTrabajadorADMINEMPRESA_PAG(
+						@RequestAttribute("claims") final Claims claims,
+						final @RequestBody PaginacionRequestDto instaParam) {
+					UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+					
+					if (user.getEmpresaFk() == null) {
+						return Utils.responseUnauthorized("No registra empresa asignada como Administrador");
+					}
+
+					if (Utils.hasProfile(user, Const.ADMIN_EMPRESA)) {
+						ResponseDto<PaginacionObjetoResponseDto> rdto = new ResponseDto<>();
+						rdto.setObj(informeService.getAllInformeTrabajadorADMINEMPRESA_PAG(
+								user.getEmpresaFk(),
+								instaParam.getPageNumber(),
+								instaParam.getPageSize(),
+								instaParam.getFromDate(),
+								instaParam.getToDate()
+								));
+						rdto.setMessage("OK");
+						rdto.setStatus(HttpStatus.OK);
+						return new ResponseEntity<>(rdto, HttpStatus.OK);
+					}
+
+					return Utils.responseUnauthorized();
+				}
 }

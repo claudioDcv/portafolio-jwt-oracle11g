@@ -89,13 +89,13 @@ public class TrabajadorServiceImpl implements TrabajadorService{
 	
 	
 	@Override
-	public Long getTrabajadorByRutAndEmpresaId(String rut, Long empresaId) {
+	public Integer getTrabajadorByRutAndEmpresaId(String rut, Long empresaId) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("trabajador_by_run_empresa_id");
 
 		query.setParameter("p_run", rut);
 		query.setParameter("p_empresa_id", empresaId);
 		query.execute();
 
-		return (Long) query.getOutputParameterValue("numero_usuarios");
+		return (Integer) query.getOutputParameterValue("numero_usuarios");
 	}
 }

@@ -24,6 +24,8 @@ public class RegisterRequest {
 
   @NotEmpty
   private String password;
+  
+  private Long empresaFk;
 
   private List<Profile> profiles;
 

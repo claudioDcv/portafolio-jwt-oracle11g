@@ -23,5 +23,6 @@ public class UserJson{
 	private String email;
 	private String name;
 	private String surname;
+	private Long empresaFk;
 	private List<Profile> profiles;
 }

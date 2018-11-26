@@ -166,6 +166,38 @@ import lombok.Setter;
 					@StoredProcedureParameter(name="P_ESTADO", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "info_instalacion_admin_empresa",
+			procedureName = "info_instalacion_admin_empresa",
+			resultClasses= { InformeInstalacionDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="P_ID_EMPRESA", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_cursor", type = void.class)
+			}
+			),
+	@NamedStoredProcedureQuery(
+			name = "info_trabajador_admin_empresa",
+			procedureName = "info_trabajador_admin_empresa",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_id_empresa", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_cursor", type = void.class)
+			}
+	),
+	@NamedStoredProcedureQuery(
+			name = "info_trab_admin_empresa_dat",
+			procedureName = "info_trab_admin_empresa_dat",
+			resultClasses= { InformeTrabajadorDto.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_id_empresa", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_page_number", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_page_size", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_from_date", mode = ParameterMode.IN, type = Date.class),
+					@StoredProcedureParameter(name="p_to_date", mode = ParameterMode.IN, type = Date.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_count", type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_cursor", type = void.class)
+			}
 	)
 })
 @Table(name="INFORMES_DETALLES")

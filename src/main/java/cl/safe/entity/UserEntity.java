@@ -68,6 +68,7 @@ import lombok.ToString;
 					@StoredProcedureParameter(name="p_DISPLAY_NAME", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_LAST_NAME", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_PASSWORD", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_empresa_id", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(name="o_USER_ID", mode = ParameterMode.OUT, type = Long.class)
 			}
 	),
@@ -88,6 +89,7 @@ import lombok.ToString;
 					@StoredProcedureParameter(name="p_EMAIL", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_DISPLAY_NAME", mode = ParameterMode.IN, type = String.class),
 					@StoredProcedureParameter(name="p_SURNAME", mode = ParameterMode.IN, type = String.class),
+					@StoredProcedureParameter(name="p_empresa_id", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(name="p_USER_ID", mode = ParameterMode.IN, type = Long.class),
 					@StoredProcedureParameter(name="o_USER_ID", mode = ParameterMode.OUT, type = Long.class)
 			}
@@ -114,6 +116,8 @@ public class UserEntity implements Serializable {
 	@Getter @Setter String surname;
 
 	@Getter @Setter String email;
+	
+	@Getter @Setter Long empresaFk;
 	
 	@Column(name="password")
 	@Getter @Setter String hash;

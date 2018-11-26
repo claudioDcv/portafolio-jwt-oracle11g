@@ -25,6 +25,7 @@ import cl.safe.dto.CapacitacionParaTrabajadorRequestDto;
 import cl.safe.dto.CapacitacionParaTrabajadorResponseDto;
 import cl.safe.dto.ConsultaMedicaTrabajadorResponseDto;
 import cl.safe.dto.ResponseDto;
+import cl.safe.entity.CapacitacionPorHacerTrabajadorEntity;
 import cl.safe.entity.ConsultaMedicaTrabajadorEntity;
 import cl.safe.entity.EmpresaEntity;
 import cl.safe.entity.UserEntity;
@@ -71,6 +72,17 @@ public class CertificadoController {
 			) {
 		ResponseDto<List<CapacitacionParaTrabajadorResponseDto>> rdto = new ResponseDto<>();
 		rdto.setObj(certificadoService.getAllCetificados(capacitacionRequest.getRun(), capacitacionRequest.getEmpresaId()));
+		rdto.setMessage("OK");
+		rdto.setStatus(HttpStatus.OK);
+		return new ResponseEntity<>(rdto, HttpStatus.OK);
+	}
+	
+	@PostMapping("/trabajador/capacitaciones-por-hacer")
+	public ResponseEntity<ResponseDto<List<CapacitacionPorHacerTrabajadorEntity>>> getAllCapacitacionesPorHacer(
+			@RequestBody @Valid final CapacitacionParaTrabajadorRequestDto capacitacionRequest
+			) {
+		ResponseDto<List<CapacitacionPorHacerTrabajadorEntity>> rdto = new ResponseDto<>();
+		rdto.setObj(certificadoService.getAllCapacitacionesPorHacer(capacitacionRequest.getRun(), capacitacionRequest.getEmpresaId()));
 		rdto.setMessage("OK");
 		rdto.setStatus(HttpStatus.OK);
 		return new ResponseEntity<>(rdto, HttpStatus.OK);

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import cl.safe.dto.CapacitacionParaTrabajadorResponseDto;
 import cl.safe.dto.ConsultaMedicaTrabajadorResponseDto;
 import cl.safe.entity.CapacitacionParaTrabajadorEntity;
+import cl.safe.entity.CapacitacionPorHacerTrabajadorEntity;
+import cl.safe.entity.ConsultaMedicaFullTrabajadorEntity;
 import cl.safe.entity.ConsultaMedicaTrabajadorEntity;
 
 @Service
@@ -41,6 +43,23 @@ public class CertificadoServiceImpl implements CertificadoService {
 	@Override
 	public List<ConsultaMedicaTrabajadorResponseDto> getAllConsultas(String run, Long empresaId) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("consulta_by_trabajador_run");
+		query.setParameter("p_run", run);
+		query.setParameter("p_empresa_id", empresaId);
+		return query.getResultList();
+	}
+
+	@Override
+	public ConsultaMedicaFullTrabajadorEntity getConsultas(String run, Long empresaId, Long consultaId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("consulta_by_emp_vis_run");
+		query.setParameter("p_run", run);
+		query.setParameter("p_empresa_id", empresaId);
+		query.setParameter("p_consulta_medica_id", consultaId);
+		return (ConsultaMedicaFullTrabajadorEntity) query.getSingleResult();
+	}
+
+	@Override
+	public List<CapacitacionPorHacerTrabajadorEntity> getAllCapacitacionesPorHacer(String run, Long empresaId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("capa_por_hacer_trab");
 		query.setParameter("p_run", run);
 		query.setParameter("p_empresa_id", empresaId);
 		return query.getResultList();

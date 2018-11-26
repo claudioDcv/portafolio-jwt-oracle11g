@@ -21,5 +21,5 @@ public interface TrabajadorService {
 	
 	List<TrabajadorEntity> findAllTrabajadoresRiesgoByEmpresaId(Long empresaId);
 
-	Long getTrabajadorByRutAndEmpresaId(String rut, Long empresaId);
+	Integer getTrabajadorByRutAndEmpresaId(String rut, Long empresaId);
 }

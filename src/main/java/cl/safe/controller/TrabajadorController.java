@@ -82,17 +82,39 @@ public class TrabajadorController {
 	@PostMapping("")
 	public ResponseEntity<ResponseDto<Long>> crearTrabajador(
 			@RequestAttribute("claims") final Claims claims,
-			@RequestBody @Valid final TrabajadorRequestDto trabajadorRequestDto) {
+			@RequestBody @Valid final TrabajadorRequestDto tra) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 
-		if ( trabajadorService.getTrabajadorByRutAndEmpresaId(trabajadorRequestDto.getRun(), trabajadorRequestDto.getEmpresa()) > 0 ) {
-			return Utils.responseUnauthorized("Trabajador ya existe");
+		if ( trabajadorService.getTrabajadorByRutAndEmpresaId(tra.getRun(), tra.getEmpresa()) > 0 ) {
+			return Utils.responseUnauthorized("Trabajador con este rut ya existe en esta empresa.");
 		}
+		
+		
+		if (
+				tra.getApellidoMaterno().isEmpty() || 
+				tra.getApellidoPaterno().isEmpty() || 
+				tra.getEmail().isEmpty() || 
+				tra.getEmpresa() == null || 
+				tra.getNombre().isEmpty() || 
+				tra.getRun().isEmpty()) {
+			return Utils.responseUnauthorized("Todos los datos son requeridos.");
+		}
+		
+		if (
+				tra.getApellidoMaterno() == null || 
+				tra.getApellidoPaterno() == null || 
+				tra.getEmail() == null || 
+				tra.getEmpresa() == null || 
+				tra.getNombre() == null || 
+				tra.getRun() == null) {
+			return Utils.responseUnauthorized("Todos los datos son requeridos.");
+		}
+		
 		
 		if (Utils.hasProfile(user,
 				Const.ADMIN_SAFE)) {
 			ResponseDto<Long> rdto = new ResponseDto<>();
-			rdto.setObj(trabajadorService.crearTrabajadorSP(trabajadorRequestDto));
+			rdto.setObj(trabajadorService.crearTrabajadorSP(tra));
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);

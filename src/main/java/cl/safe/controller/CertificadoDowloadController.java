@@ -24,12 +24,16 @@ import cl.safe.config.Const;
 import cl.safe.config.Utils;
 import cl.safe.dto.CapacitacionParaTrabajadorRequestDto;
 import cl.safe.dto.CapacitacionParaTrabajadorResponseDto;
+import cl.safe.dto.ConsultaMedicaParaTrabajadorRequestDto;
 import cl.safe.dto.ResponseDto;
 import cl.safe.entity.CapacitacionParaTrabajadorEntity;
+import cl.safe.entity.ConsultaMedicaFullTrabajadorEntity;
 import cl.safe.entity.EmpresaEntity;
+import cl.safe.entity.ExamenEntity;
 import cl.safe.entity.UserEntity;
 import cl.safe.service.CertificadoService;
 import cl.safe.service.EmpresaService;
+import cl.safe.service.ExamenService;
 import io.jsonwebtoken.Claims;
 
 @Controller
@@ -39,6 +43,9 @@ public class CertificadoDowloadController {
 	@Autowired
 	CertificadoService certificadoService;
 	
+	@Autowired
+	private ExamenService examenService;
+
 	@PostMapping("/capacitacion")
 	public String ver(
 			@RequestBody @Valid final CapacitacionParaTrabajadorRequestDto cr,
@@ -50,5 +57,20 @@ public class CertificadoDowloadController {
 		
 		model.addAttribute("certificado", c);
 		return "certificado/ver";
+	}
+	
+	@PostMapping("/consulta-medica")
+	public String ver(
+			@RequestBody @Valid final ConsultaMedicaParaTrabajadorRequestDto cr,
+			Model model) {
+		
+		ConsultaMedicaFullTrabajadorEntity c = certificadoService.getConsultas(cr.getRun(), cr.getEmpresaId(), cr.getConsultaId());
+
+		List<ExamenEntity> examenes = examenService.getAllExamenesByConsultaId(cr.getConsultaId());
+
+		model.addAttribute("consulta", c);
+		model.addAttribute("examenes", examenes);
+		
+		return "consulta/ver";
 	}
 }
