@@ -66,7 +66,9 @@ public class EmpresaController {
 				Const.EXAMINADOR,
 				Const.MEDICO,
 				Const.TECNICO,
-				Const.SUPERVISOR)) {
+				Const.SUPERVISOR) || (
+			Utils.hasProfile(user, Const.ADMIN_EMPRESA) && user.getEmpresaFk() == id
+		)) {
 			ResponseDto<EmpresaEntity> rdto = new ResponseDto<>();
 			rdto.setObj(empresaService.findOne(id));
 			rdto.setMessage("OK");

@@ -1,11 +1,13 @@
 package cl.safe.service;
 
+import java.util.Date;
 import java.util.List;
 
 import cl.safe.dto.InformeInstalacionDto;
 import cl.safe.dto.InformeInstalacionDtoRequest;
 import cl.safe.dto.InformeTrabajadorDto;
 import cl.safe.dto.InformeTrabajadorRequestDto;
+import cl.safe.dto.PaginacionObjetoResponseDto;
 import cl.safe.dto.ObservacionRequestDto;
 import cl.safe.entity.ObservacionEntity;
 public interface InformeService {
@@ -31,4 +33,9 @@ public interface InformeService {
 	List<InformeInstalacionDto> getAllInformeInstalacionyByEstadoPrevencionistaId(Long preveId, Long idEmpresa, Long estado);
 
 	Long agregarRecomendacionParaObservacionPorPreve(String observacion, Long observacionId);
+	
+	// solo admin empresa
+	List<InformeInstalacionDto> getAllInformeInstalacionADMINEMPRESA(Long empresa);
+	List<InformeTrabajadorDto> getAllInformeTrabajadorADMINEMPRESA(Long empresa);
+	PaginacionObjetoResponseDto getAllInformeTrabajadorADMINEMPRESA_PAG(Long empresa, Long pageNumber, Long pageSize, Date fromDate, Date toDate);
 }

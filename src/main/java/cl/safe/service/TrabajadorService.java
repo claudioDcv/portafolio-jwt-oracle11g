@@ -20,4 +20,6 @@ public interface TrabajadorService {
 	Long asignarRiesgosConTrabajadorId(List<Long> riesgosIds, Long trabajadorId);
 	
 	List<TrabajadorEntity> findAllTrabajadoresRiesgoByEmpresaId(Long empresaId);
+
+	Integer getTrabajadorByRutAndEmpresaId(String rut, Long empresaId);
 }

@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.validation.Valid;
 
@@ -49,8 +50,22 @@ public class UsersController {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		
 		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.SUPERVISOR)) {
+			
+			final List<UserEntity> usuariosEstandarizados = userServiceSP.getAllUsers();
+			
+			usuariosEstandarizados.forEach(new Consumer<UserEntity>() {
+
+				@Override
+				public void accept(UserEntity t) {
+					if (t.getEmpresaFk() == null) {
+						t.setEmpresaFk((long)0);
+					}
+				}
+			});
+			
+			
 			ResponseDto<List<UserEntity>> rdto = new ResponseDto<>();
-			rdto.setObj(userServiceSP.getAllUsers());
+			rdto.setObj(usuariosEstandarizados);
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
@@ -91,7 +106,7 @@ public class UsersController {
 	public ResponseEntity<ResponseDto<UserJson>> getProfile(@RequestAttribute("claims") final Claims claims) throws NotFoundException {
 		UserEntity u = userServiceSP.findByEmail(claims.getSubject());
 		UserJson uJson = UserJson.builder().email(u.getEmail()).name(u.getName()).surname(u.getSurname())
-				.profiles(u.getProfiles()).id(u.getId()).build();
+				.empresaFk(u.getEmpresaFk()).profiles(u.getProfiles()).id(u.getId()).build();
 		
 		if(uJson != null) {
 			ResponseDto<UserJson> rdto = new ResponseDto<>();

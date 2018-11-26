@@ -42,10 +42,15 @@ public class UserServiceSPImpl implements UserServiceSP {
 	@Override
 	public Long updateSP(UserEntity user) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_update");
+		
+		if (user.getEmpresaFk() == null || user.getEmpresaFk() == (long) 0) {
+			user.setEmpresaFk((long)0);
+		}
 		query.setParameter("p_EMAIL", user.getEmail());
 		query.setParameter("p_DISPLAY_NAME", user.getName());
 		query.setParameter("p_SURNAME", user.getSurname());
 		query.setParameter("p_USER_ID", user.getId());
+		query.setParameter("p_empresa_id", user.getEmpresaFk());
 		query.execute();
 		return (Long) query.getOutputParameterValue("o_USER_ID");
 	}
@@ -85,21 +90,19 @@ public class UserServiceSPImpl implements UserServiceSP {
         
         return usuariosSinContrasena;
         
-        
-        /*
-		@StoredProcedureParameter(name="p_EMAIL", mode = ParameterMode.IN, type = String.class),
-					@StoredProcedureParameter(name="p_DISPLAY_NAME", mode = ParameterMode.IN, type = String.class),
-					@StoredProcedureParameter(name="p_PASSWORD", mode = ParameterMode.IN, type = String.class),
-					@StoredProcedureParameter(name="o_USER_ID", mode = ParameterMode.OUT, type = Long.class)
-        */
 	}
 
 	@Override
 	public Long saveSP(RegisterRequest user) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_insert");
+		if (user.getEmpresaFk() == null || user.getEmpresaFk() == (long) 0) {
+			user.setEmpresaFk((long)0);
+		}
+
 		query.setParameter("p_EMAIL", user.getEmail());
 		query.setParameter("p_DISPLAY_NAME", user.getName());
 		query.setParameter("p_LAST_NAME", user.getSurname());
+		query.setParameter("p_empresa_id", user.getEmpresaFk());
 		query.setParameter("p_PASSWORD", PasswordUtils.createHash(user.getPassword()));
 		query.execute();
 		return (Long) query.getOutputParameterValue("o_USER_ID");

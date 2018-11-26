@@ -81,18 +81,21 @@ public class TrabajadorServiceImpl implements TrabajadorService{
 
 	@Override
 	public List<TrabajadorEntity> findAllTrabajadoresRiesgoByEmpresaId(Long empresaId) {
-		/*
-		 * @NamedStoredProcedureQuery(name = "trabajadores_riesgo_all",
-		    procedureName = "trabajadores_riesgo_all",
-			resultClasses = TrabajadorEntity.class,
-			parameters = {
-					@StoredProcedureParameter(name="p_empresa_fk", mode = ParameterMode.IN, type = Long.class),
-					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
-				}
-			)
-		 */
+
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("trabajadores_riesgo_all");
 		query.setParameter("p_empresa_fk", empresaId);
 		return query.getResultList();
+	}
+	
+	
+	@Override
+	public Integer getTrabajadorByRutAndEmpresaId(String rut, Long empresaId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("trabajador_by_run_empresa_id");
+
+		query.setParameter("p_run", rut);
+		query.setParameter("p_empresa_id", empresaId);
+		query.execute();
+
+		return (Integer) query.getOutputParameterValue("numero_usuarios");
 	}
 }
