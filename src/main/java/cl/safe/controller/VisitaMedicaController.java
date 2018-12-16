@@ -21,6 +21,8 @@ import cl.safe.config.Utils;
 import cl.safe.dto.ConsultaMedicaRequestDto;
 import cl.safe.dto.ExamenConsultaMedicaRequestDto;
 import cl.safe.dto.InstalacionRequestDto;
+import cl.safe.dto.PaginacionObjetoResponseDto;
+import cl.safe.dto.PaginacionRequestDto;
 import cl.safe.dto.ResponseDto;
 import cl.safe.dto.VisitaMedicaRequestDto;
 import cl.safe.entity.ConsultaMedicaEntity;
@@ -250,6 +252,36 @@ public class VisitaMedicaController {
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);
 		}
+		return Utils.responseUnauthorized();
+	}
+	
+	
+	// ESTO ES PARA ADMIN DE EMPRESAS
+	
+	@PostMapping("/admin-empresa")
+	public ResponseEntity<ResponseDto<PaginacionObjetoResponseDto<VisitaMedicaEntity>>> getAllInformeInstalacionADMINEMPRESA_PAG(
+			@RequestAttribute("claims") final Claims claims,
+			final @RequestBody PaginacionRequestDto instaParam) {
+		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+		
+		if (user.getEmpresaFk() == null) {
+			return Utils.responseUnauthorized("No registra empresa asignada como Administrador");
+		}
+
+		if (Utils.hasProfile(user, Const.ADMIN_EMPRESA)) {
+			ResponseDto<PaginacionObjetoResponseDto<VisitaMedicaEntity>> rdto = new ResponseDto<>();
+			rdto.setObj(visitaMedicaService.getVisitaMedicaADMINEMPRESA_PAG(
+					user.getEmpresaFk(),
+					instaParam.getPageNumber(),
+					instaParam.getPageSize(),
+					instaParam.getFromDate(),
+					instaParam.getToDate()
+					));
+			rdto.setMessage("OK");
+			rdto.setStatus(HttpStatus.OK);
+			return new ResponseEntity<>(rdto, HttpStatus.OK);
+		}
+
 		return Utils.responseUnauthorized();
 	}
 	

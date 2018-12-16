@@ -14,6 +14,7 @@ import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 
 import cl.safe.dto.ConsultaMedicaRequestDto;
+import cl.safe.dto.InformeInstalacionDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -124,6 +125,20 @@ import lombok.Setter;
 			@StoredProcedureParameter(name="p_visita_medica_id", mode = ParameterMode.IN, type = Long.class),
 			@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "O_CURSOR", type = void.class)
 		}
+	),
+	@NamedStoredProcedureQuery(
+			name = "visitas_med_admin_empresa_dat",
+			procedureName = "visitas_med_admin_empresa_dat",
+			resultClasses= { VisitaMedicaEntity.class},
+			parameters = {
+					@StoredProcedureParameter(name="p_id_empresa", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_page_number", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_page_size", mode = ParameterMode.IN, type = Long.class),
+					@StoredProcedureParameter(name="p_from_date", mode = ParameterMode.IN, type = Date.class),
+					@StoredProcedureParameter(name="p_to_date", mode = ParameterMode.IN, type = Date.class),
+					@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_count", type = Long.class),
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_cursor", type = void.class)
+			}
 	)
 })	
 @Table(name="VISITAS_MEDICAS")

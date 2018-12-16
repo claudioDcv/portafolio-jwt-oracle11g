@@ -38,7 +38,7 @@ import lombok.ToString;
 			resultClasses= { UserEntity.class},
 			parameters = {
 					@StoredProcedureParameter(name="p_id", mode = ParameterMode.IN, type = Long.class),
-					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_CURSOR", type = void.class)
+					@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, name = "o_cursor", type = void.class)
 			}
 	),
 	@NamedStoredProcedureQuery(

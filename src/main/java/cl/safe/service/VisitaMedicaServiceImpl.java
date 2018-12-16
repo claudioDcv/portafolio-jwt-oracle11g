@@ -1,5 +1,6 @@
 package cl.safe.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.safe.dto.ConsultaMedicaRequestDto;
+import cl.safe.dto.InformeInstalacionDto;
+import cl.safe.dto.PaginacionObjetoResponseDto;
 import cl.safe.dto.VisitaMedicaRequestDto;
 import cl.safe.entity.ConsultaMedicaEntity;
 import cl.safe.entity.VisitaMedicaEntity;
@@ -182,5 +185,31 @@ public class VisitaMedicaServiceImpl implements VisitaMedicaService{
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("CONSULTA_BY_VISITA_MED_ID");
 		query.setParameter("p_visita_medica_id", visitaMedicaId);
 		return query.getResultList();
-	}	
+	}
+
+	@Override
+	public PaginacionObjetoResponseDto<VisitaMedicaEntity> getVisitaMedicaADMINEMPRESA_PAG(Long empresa,
+			Long pageNumber, Long pageSize, Date fromDate, Date toDate) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("visitas_med_admin_empresa_dat");
+
+		System.out.println("PAGINACION DATA");
+		System.out.println("empresa:" + empresa +
+				",pageNumber:" + pageNumber +
+				",pageSize:" + pageSize +
+				",from_date:" + fromDate +
+				",to_date:" + toDate);
+		query.setParameter("p_id_empresa", empresa);
+		query.setParameter("p_page_number", pageNumber);
+		query.setParameter("p_page_size", pageSize);
+		
+		query.setParameter("p_from_date", fromDate);
+		query.setParameter("p_to_date", toDate);
+
+		PaginacionObjetoResponseDto<VisitaMedicaEntity> l = new PaginacionObjetoResponseDto<>();
+		l.initialized((Long) query.getOutputParameterValue("o_count"), pageSize, pageNumber);
+		l.setList(query.getResultList());
+		
+		/* LOGICA PAGINACION */	
+		return l;
+	}
 }

@@ -203,7 +203,7 @@ public class InformeServiceImpl implements InformeService {
 	}
 	
 	@Override
-	public PaginacionObjetoResponseDto getAllInformeTrabajadorADMINEMPRESA_PAG(
+	public PaginacionObjetoResponseDto<InformeTrabajadorDto> getAllInformeTrabajadorADMINEMPRESA_PAG(
 			Long empresa,
 			Long pageNumber,
 			Long pageSize,
@@ -213,6 +213,7 @@ public class InformeServiceImpl implements InformeService {
 		
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_trab_admin_empresa_dat");
 
+		System.out.println("PAGINACION DATA");
 		System.out.println("empresa:" + empresa +
 				",pageNumber:" + pageNumber +
 				",pageSize:" + pageSize +
@@ -229,6 +230,35 @@ public class InformeServiceImpl implements InformeService {
 		
 		
 		PaginacionObjetoResponseDto<InformeTrabajadorDto> l = new PaginacionObjetoResponseDto<>();
+		l.initialized((Long) query.getOutputParameterValue("o_count"), pageSize, pageNumber);
+		l.setList(query.getResultList());
+		
+		/* LOGICA PAGINACION */	
+		return l;
+	}
+
+	@Override
+	public PaginacionObjetoResponseDto<InformeInstalacionDto> getAllInformeInstalacionADMINEMPRESA_PAG(Long empresa, Long pageNumber,
+			Long pageSize, Date fromDate, Date toDate) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("info_inst_admin_empresa_dat");
+
+		System.out.println("PAGINACION DATA");
+		System.out.println("empresa:" + empresa +
+				",pageNumber:" + pageNumber +
+				",pageSize:" + pageSize +
+				",from_date:" + fromDate +
+				",to_date:" + toDate);
+		query.setParameter("p_id_empresa", empresa);
+		query.setParameter("p_page_number", pageNumber);
+		query.setParameter("p_page_size", pageSize);
+		
+		query.setParameter("p_from_date", fromDate);
+		query.setParameter("p_to_date", toDate);
+		
+		
+		
+		
+		PaginacionObjetoResponseDto<InformeInstalacionDto> l = new PaginacionObjetoResponseDto<>();
 		l.initialized((Long) query.getOutputParameterValue("o_count"), pageSize, pageNumber);
 		l.setList(query.getResultList());
 		

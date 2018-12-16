@@ -37,5 +37,7 @@ public interface InformeService {
 	// solo admin empresa
 	List<InformeInstalacionDto> getAllInformeInstalacionADMINEMPRESA(Long empresa);
 	List<InformeTrabajadorDto> getAllInformeTrabajadorADMINEMPRESA(Long empresa);
+	
 	PaginacionObjetoResponseDto getAllInformeTrabajadorADMINEMPRESA_PAG(Long empresa, Long pageNumber, Long pageSize, Date fromDate, Date toDate);
+	PaginacionObjetoResponseDto getAllInformeInstalacionADMINEMPRESA_PAG(Long empresa, Long pageNumber, Long pageSize, Date fromDate, Date toDate);
 }

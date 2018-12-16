@@ -16,9 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.safe.dto.CapacitacionRequestDto;
+import cl.safe.dto.PaginacionObjetoResponseDto;
 import cl.safe.entity.AsistenciaTrabajadorEntity;
 import cl.safe.entity.CapacitacionEntity;
 import cl.safe.entity.UserEntity;
+import cl.safe.entity.VisitaMedicaEntity;
 import cl.safe.repository.EmpresaRepository;
 
 @Service
@@ -102,6 +104,32 @@ public class CapacitacionServiceImpl implements CapacitacionService {
 		query.setParameter("p_capacitacion_id", capacitacionId);
 		query.execute();
 		return (Long) query.getOutputParameterValue("p_id");
+	}
+
+	@Override
+	public PaginacionObjetoResponseDto<CapacitacionEntity> getCapacitacionesADMINEMPRESA_PAG(Long empresa,
+			Long pageNumber, Long pageSize, Date fromDate, Date toDate) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("capa_admin_empresa_dat");
+
+		System.out.println("PAGINACION DATA");
+		System.out.println("empresa:" + empresa +
+				",pageNumber:" + pageNumber +
+				",pageSize:" + pageSize +
+				",from_date:" + fromDate +
+				",to_date:" + toDate);
+		query.setParameter("p_id_empresa", empresa);
+		query.setParameter("p_page_number", pageNumber);
+		query.setParameter("p_page_size", pageSize);
+		
+		query.setParameter("p_from_date", fromDate);
+		query.setParameter("p_to_date", toDate);
+
+		PaginacionObjetoResponseDto<CapacitacionEntity> l = new PaginacionObjetoResponseDto<>();
+		l.initialized((Long) query.getOutputParameterValue("o_count"), pageSize, pageNumber);
+		l.setList(query.getResultList());
+		
+		/* LOGICA PAGINACION */	
+		return l;
 	}
 
 }

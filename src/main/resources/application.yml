@@ -21,6 +21,10 @@ spring:
 
 ## MULTIPART (MultipartProperties)
 # Enable multipart uploads
+  http:
+    multipart:
+      max-file-size: 3MB
+      max-request-size: 4MB
   servlet:
     multipart:
       enabled: true
@@ -32,7 +36,7 @@ spring:
       max-request-size: 215MB
      
   mvc:
-    contentnogotiation:
+    contentnegotiation:
       favor-parameter: true
       media-types:
         pdf: application/pdf

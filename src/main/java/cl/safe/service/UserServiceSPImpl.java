@@ -96,7 +96,7 @@ public class UserServiceSPImpl implements UserServiceSP {
 	public Long saveSP(RegisterRequest user) {
 		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("users_insert");
 		if (user.getEmpresaFk() == null || user.getEmpresaFk() == (long) 0) {
-			user.setEmpresaFk((long)0);
+			user.setEmpresaFk(null);
 		}
 
 		query.setParameter("p_EMAIL", user.getEmail());

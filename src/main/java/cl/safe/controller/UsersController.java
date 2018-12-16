@@ -91,6 +91,7 @@ public class UsersController {
 	@GetMapping("/perfiles/{id}")
 	public ResponseEntity<ResponseDto<List<UserEntity>>> getAllByProfileId(@RequestAttribute("claims") final Claims claims, @PathVariable(name="id") Long id) {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+
 		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.SUPERVISOR, Const.EXAMINADOR, Const.MEDICO, Const.PREVENCIONISTA, Const.TECNICO)) {
 			ResponseDto<List<UserEntity>> rdto = new ResponseDto<>();
 			rdto.setObj(userServiceSP.usersByProfileId(id));

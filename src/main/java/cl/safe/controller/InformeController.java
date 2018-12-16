@@ -389,30 +389,57 @@ public class InformeController {
 		}
 		
 		// por id de informe trabajador /api/informes/trabajador-admin-empresa
-				@PostMapping("/trabajador-admin-empresa")
-				public ResponseEntity<ResponseDto<PaginacionObjetoResponseDto>> getAllInformeTrabajadorADMINEMPRESA_PAG(
-						@RequestAttribute("claims") final Claims claims,
-						final @RequestBody PaginacionRequestDto instaParam) {
-					UserEntity user = userServiceSP.findByEmail(claims.getSubject());
-					
-					if (user.getEmpresaFk() == null) {
-						return Utils.responseUnauthorized("No registra empresa asignada como Administrador");
-					}
+		@PostMapping("/trabajador-admin-empresa")
+		public ResponseEntity<ResponseDto<PaginacionObjetoResponseDto>> getAllInformeTrabajadorADMINEMPRESA_PAG(
+				@RequestAttribute("claims") final Claims claims,
+				final @RequestBody PaginacionRequestDto instaParam) {
+			UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+			
+			if (user.getEmpresaFk() == null) {
+				return Utils.responseUnauthorized("No registra empresa asignada como Administrador");
+			}
 
-					if (Utils.hasProfile(user, Const.ADMIN_EMPRESA)) {
-						ResponseDto<PaginacionObjetoResponseDto> rdto = new ResponseDto<>();
-						rdto.setObj(informeService.getAllInformeTrabajadorADMINEMPRESA_PAG(
-								user.getEmpresaFk(),
-								instaParam.getPageNumber(),
-								instaParam.getPageSize(),
-								instaParam.getFromDate(),
-								instaParam.getToDate()
-								));
-						rdto.setMessage("OK");
-						rdto.setStatus(HttpStatus.OK);
-						return new ResponseEntity<>(rdto, HttpStatus.OK);
-					}
+			if (Utils.hasProfile(user, Const.ADMIN_EMPRESA)) {
+				ResponseDto<PaginacionObjetoResponseDto> rdto = new ResponseDto<>();
+				rdto.setObj(informeService.getAllInformeTrabajadorADMINEMPRESA_PAG(
+						user.getEmpresaFk(),
+						instaParam.getPageNumber(),
+						instaParam.getPageSize(),
+						instaParam.getFromDate(),
+						instaParam.getToDate()
+						));
+				rdto.setMessage("OK");
+				rdto.setStatus(HttpStatus.OK);
+				return new ResponseEntity<>(rdto, HttpStatus.OK);
+			}
 
-					return Utils.responseUnauthorized();
-				}
+			return Utils.responseUnauthorized();
+		}
+		
+		@PostMapping("/instalacion-admin-empresa")
+		public ResponseEntity<ResponseDto<PaginacionObjetoResponseDto>> getAllInformeInstalacionADMINEMPRESA_PAG(
+				@RequestAttribute("claims") final Claims claims,
+				final @RequestBody PaginacionRequestDto instaParam) {
+			UserEntity user = userServiceSP.findByEmail(claims.getSubject());
+			
+			if (user.getEmpresaFk() == null) {
+				return Utils.responseUnauthorized("No registra empresa asignada como Administrador");
+			}
+
+			if (Utils.hasProfile(user, Const.ADMIN_EMPRESA)) {
+				ResponseDto<PaginacionObjetoResponseDto> rdto = new ResponseDto<>();
+				rdto.setObj(informeService.getAllInformeInstalacionADMINEMPRESA_PAG(
+						user.getEmpresaFk(),
+						instaParam.getPageNumber(),
+						instaParam.getPageSize(),
+						instaParam.getFromDate(),
+						instaParam.getToDate()
+						));
+				rdto.setMessage("OK");
+				rdto.setStatus(HttpStatus.OK);
+				return new ResponseEntity<>(rdto, HttpStatus.OK);
+			}
+
+			return Utils.responseUnauthorized();
+		}
 }
