@@ -30,4 +30,12 @@ public class AsistenciaServiceImpl implements AsistenciaService {
 		return (Long) query.getOutputParameterValue("o_id");
 	}
 
+	@Override
+	public String getFirmaByAsistenciaId(Long asistenciaId) {
+		StoredProcedureQuery query = em.createNamedStoredProcedureQuery("asistencia_firma_by_id");
+		query.setParameter("p_asistencia_id", asistenciaId);
+		query.execute();
+		return (String) query.getOutputParameterValue("o_firma");
+	}
+
 }

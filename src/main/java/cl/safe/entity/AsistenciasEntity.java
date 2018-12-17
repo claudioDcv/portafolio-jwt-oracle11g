@@ -34,6 +34,14 @@ import lombok.Setter;
 			@StoredProcedureParameter(name="p_firma_src", mode = ParameterMode.IN, type = String.class),
 			@StoredProcedureParameter(mode = ParameterMode.OUT, name = "o_id", type = Long.class)
 		}
+	),
+	@NamedStoredProcedureQuery(name = "asistencia_firma_by_id",
+    procedureName = "asistencia_firma_by_id",
+	resultClasses = AsistenciasEntity.class,
+	parameters = {
+			@StoredProcedureParameter(name="p_asistencia_id", mode = ParameterMode.IN, type = Long.class),
+			@StoredProcedureParameter(name="o_firma", mode = ParameterMode.OUT, type = String.class)
+		}
 	)
 })
 @Getter

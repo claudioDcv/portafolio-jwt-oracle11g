@@ -79,7 +79,11 @@ public class UsersController {
 		UserEntity user = userServiceSP.findByEmail(claims.getSubject());
 		if (Utils.hasProfile(user, Const.ADMIN_SAFE, Const.SUPERVISOR)) {
 			ResponseDto<UserEntity> rdto = new ResponseDto<>();
-			rdto.setObj(userServiceSP.findById(id));
+			UserEntity usuario = userServiceSP.findById(id);
+			if (usuario.getEmpresaFk() == null) {
+				usuario.setEmpresaFk((long)0);
+			}
+			rdto.setObj(usuario);
 			rdto.setMessage("OK");
 			rdto.setStatus(HttpStatus.OK);
 			return new ResponseEntity<>(rdto, HttpStatus.OK);

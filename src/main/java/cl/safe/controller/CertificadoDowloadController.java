@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.http.client.HttpResponseException;
@@ -45,6 +46,9 @@ public class CertificadoDowloadController {
 	
 	@Autowired
 	private ExamenService examenService;
+
+	@Autowired
+	HttpServletRequest request;
 
 	@PostMapping("/capacitacion")
 	public String ver(

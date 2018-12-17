@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.safe.config.Const;
+import cl.safe.config.ImageResizer;
 import cl.safe.config.Utils;
 import cl.safe.dto.AsistenciaDtoResponse;
 import cl.safe.dto.AsistenciaRequestDto;
@@ -68,7 +69,7 @@ public class CapacitacionController {
 	FileStorageService fileStorageService;
 
 	@Autowired
-	HttpServletRequest request;
+	ImageResizer imageResizer;
 	
 	@GetMapping("/examinador/{empresaId}")
 	public ResponseEntity<ResponseDto<List<CapacitacionEntity>>> findAllByEmpresaExaminador(@RequestAttribute("claims") final Claims claims, @PathVariable(name="empresaId") Long empresaId) {
@@ -141,8 +142,9 @@ public class CapacitacionController {
 					
 					if (t.getFirma() != null) {
 						try {
-							asistenciaResponse.setFirma(fileNameToBase64(t.getFirma()));
+							asistenciaResponse.setFirma(imageResizer.fileNameToBase64(t.getFirma()));
 						} catch (IOException e) {
+							System.out.println(e);
 							t.setFirma("false");
 						}
 					}
@@ -223,71 +225,5 @@ public class CapacitacionController {
 
 		return Utils.responseUnauthorized();
 	}
-	
-	
-	private String fileNameToBase64(String fileName) throws IOException {
-		 // /{fileName:.+}@PathVariable String fileName,
-		 // Load file as Resour ce
-		 
-		 	System.out.println(fileName);
-	        Resource resource = fileStorageService.loadFileAsResource(fileName);
 
-	        // Try to determine file's content type
-	        String contentType = null;
-	        try {
-	            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-	        } catch (IOException ex) {
-	            logger.info("Could not determine file type.");
-	        }
-
-	        // Fallback to the default content type if type could not be determined
-	        if(contentType == null) {
-	            contentType = "application/octet-stream";
-	        }
-
-	        byte[] imageBytes = loadFile(resource.getFile());
-	        String imageStr = Base64.encodeBase64String(imageBytes);
-	        
-	        Path path = new File(resource.getFilename()).toPath();
-	        String mimeType = Files.probeContentType(path);
-
-	        String base64 = "data:" + mimeType + ";base64," + imageStr;
-	        
-	        System.out.println(base64);
-	        
-	        return base64;
-	        
-	        /*
-	        System.out.println(contentType);
-	        return ResponseEntity.ok()
-	                .contentType(MediaType.parseMediaType("image/jpg"))
-	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-	                .body(resource);
-	        */
-	    }
-	 
-	 
-	 	private static byte[] loadFile(File file) throws IOException {
-		    InputStream is = new FileInputStream(file);
-
-		    long length = file.length();
-		    if (length > Integer.MAX_VALUE) {
-		        // File is too large
-		    }
-		    byte[] bytes = new byte[(int)length];
-		    
-		    int offset = 0;
-		    int numRead = 0;
-		    while (offset < bytes.length
-		           && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
-		        offset += numRead;
-		    }
-
-		    if (offset < bytes.length) {
-		        throw new IOException("Could not completely read file "+file.getName());
-		    }
-
-		    is.close();
-		    return bytes;
-		}
 }
